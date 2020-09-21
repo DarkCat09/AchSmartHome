@@ -1,0 +1,21 @@
+# Russian Language File
+Русский
+FormTitle=Управление умным домом AchSmartHome
+PanelText=Панель
+Connect=Подключиться
+Management=Управление
+Homepage=Главная страница
+Light=Свет
+LightManage=Управление
+Settings=Настройки
+Exit=Выход
+Help=Справка
+AboutProg=О программе
+AboutProj=О проекте ASH
+Login=Вход
+FlowersWatering=Цветы политы в
+Language=Язык
+Theme=Тема
+AdvancedSettings=Расширенные
+HideToTray=Сворачивать окно в трей
+DontWorkInBg=Не работать в фоновом режиме

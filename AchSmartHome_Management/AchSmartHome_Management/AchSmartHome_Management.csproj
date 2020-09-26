@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeLinkColorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeLinkColorForm.Designer.cs">
+      <DependentUpon>ChangeLinkColorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConnectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,12 +80,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChangeLinkColorForm.resx">
+      <DependentUpon>ChangeLinkColorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConnectForm.resx">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -130,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="pictures\temperature.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pictures\lamp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

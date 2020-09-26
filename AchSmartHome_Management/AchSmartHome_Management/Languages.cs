@@ -25,7 +25,7 @@ namespace AchSmartHome_Management
 {
     class Languages
     {
-        public static string curlang = "RU";
+        public static string curlang = Properties.Settings.Default.language;
         public static Dictionary<string, string> Lang = new Dictionary<string, string>();
 
         public static Dictionary<string, string> InitLangs()

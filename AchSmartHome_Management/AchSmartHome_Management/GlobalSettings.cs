@@ -24,10 +24,34 @@ namespace AchSmartHome_Management
 {
     class GlobalSettings
     {
-        public static System.Drawing.Color theme = new System.Drawing.Color();
-        public static System.Drawing.Color fontcol = new System.Drawing.Color();
-        public static bool minimizeToTray = false;
-        public static bool dontWorkInBackground = false;
+        public static System.Drawing.Color theme = Properties.Settings.Default.theme;
+        public static System.Drawing.Color fontcol = Properties.Settings.Default.font_color;
+        public static bool minimizeToTray = Properties.Settings.Default.min_to_tray;
+        public static bool dontWorkInBackground = Properties.Settings.Default.dont_work_in_bg;
+
+        public static void ChangeSettings(
+            string _language,
+            System.Drawing.Color _theme,
+            System.Drawing.Color _fontcol,
+            bool _minToTray,
+            bool _dontWorkInBg
+        )
+        {
+            // update local settings
+            Languages.curlang = _language;
+            theme = _theme;
+            fontcol = _fontcol;
+            minimizeToTray = _minToTray;
+            dontWorkInBackground = _dontWorkInBg;
+
+            // update settings in special file
+            Properties.Settings.Default.theme = _theme;
+            Properties.Settings.Default.font_color = _fontcol;
+            Properties.Settings.Default.min_to_tray = _minToTray;
+            Properties.Settings.Default.dont_work_in_bg = _dontWorkInBg;
+            Properties.Settings.Default.language = _language;
+            Properties.Settings.Default.Save();
+        }
 
         public static void InitThemeAndLang(Control.ControlCollection ctrls, Control f)
         {
@@ -39,8 +63,10 @@ namespace AchSmartHome_Management
             f.BackColor = theme;
             foreach (Control ctrl in ctrls)
             {
-                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is TableLayoutPanel))
+                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is MenuStrip) && !(ctrl is TableLayoutPanel))
                     ctrl.ForeColor = GlobalSettings.fontcol;
+                if (ctrl is LinkLabel)
+                    ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
 
                 //for TableLayoutPanel
                 if (ctrl is TableLayoutPanel)
@@ -52,8 +78,10 @@ namespace AchSmartHome_Management
                         {
                             foreach (Control panelctrl in ((Panel)tablectrl).Controls)
                             {
-                                if (!(panelctrl is Button) && !(panelctrl is ComboBox) && !(panelctrl is TableLayoutPanel))
+                                if (!(panelctrl is Button) && !(panelctrl is ComboBox) && !(panelctrl is MenuStrip) && !(panelctrl is TableLayoutPanel))
                                     panelctrl.ForeColor = GlobalSettings.fontcol;
+                                if (ctrl is LinkLabel)
+                                    ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
 
                                 if (panelctrl.Tag != null)
                                 {
@@ -65,8 +93,10 @@ namespace AchSmartHome_Management
                             }
                         }
 
-                        if (!(tablectrl is Button) && !(tablectrl is ComboBox) && !(tablectrl is TableLayoutPanel))
+                        if (!(tablectrl is Button) && !(tablectrl is ComboBox) && !(tablectrl is MenuStrip) && !(tablectrl is TableLayoutPanel))
                             tablectrl.ForeColor = GlobalSettings.fontcol;
+                        if (ctrl is LinkLabel)
+                            ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
 
                         if (tablectrl.Tag != null)
                         {

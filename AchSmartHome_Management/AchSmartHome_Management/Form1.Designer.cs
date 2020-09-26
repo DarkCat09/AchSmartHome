@@ -69,7 +69,7 @@
             // соединитьсяToolStripMenuItem
             // 
             this.соединитьсяToolStripMenuItem.Name = "соединитьсяToolStripMenuItem";
-            this.соединитьсяToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.соединитьсяToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.соединитьсяToolStripMenuItem.Tag = "Connect";
             this.соединитьсяToolStripMenuItem.Text = "Подключиться";
             this.соединитьсяToolStripMenuItem.Click += new System.EventHandler(this.соединитьсяToolStripMenuItem_Click);
@@ -81,14 +81,14 @@
             this.светToolStripMenuItem,
             this.настройкиToolStripMenuItem});
             this.управлениеToolStripMenuItem.Name = "управлениеToolStripMenuItem";
-            this.управлениеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.управлениеToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.управлениеToolStripMenuItem.Tag = "Management";
             this.управлениеToolStripMenuItem.Text = "Управление";
             // 
             // главнаяСтраницаToolStripMenuItem
             // 
             this.главнаяСтраницаToolStripMenuItem.Name = "главнаяСтраницаToolStripMenuItem";
-            this.главнаяСтраницаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.главнаяСтраницаToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.главнаяСтраницаToolStripMenuItem.Tag = "Homepage";
             this.главнаяСтраницаToolStripMenuItem.Text = "Главная страница";
             this.главнаяСтраницаToolStripMenuItem.Click += new System.EventHandler(this.главнаяСтраницаToolStripMenuItem_Click);
@@ -96,7 +96,7 @@
             // светToolStripMenuItem
             // 
             this.светToolStripMenuItem.Name = "светToolStripMenuItem";
-            this.светToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.светToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.светToolStripMenuItem.Tag = "Light";
             this.светToolStripMenuItem.Text = "Свет";
             this.светToolStripMenuItem.Click += new System.EventHandler(this.светToolStripMenuItem_Click);
@@ -104,7 +104,7 @@
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.настройкиToolStripMenuItem.Tag = "Settings";
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
@@ -112,7 +112,7 @@
             // выходToolStripMenuItem
             // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.выходToolStripMenuItem.Tag = "Exit";
             this.выходToolStripMenuItem.Text = "Выход";
             this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
@@ -130,14 +130,14 @@
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.оПрограммеToolStripMenuItem.Tag = "AboutProg";
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             // 
             // оПроектеASHToolStripMenuItem
             // 
             this.оПроектеASHToolStripMenuItem.Name = "оПроектеASHToolStripMenuItem";
-            this.оПроектеASHToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.оПроектеASHToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.оПроектеASHToolStripMenuItem.Tag = "AboutProj";
             this.оПроектеASHToolStripMenuItem.Text = "О проекте ASH";
             // 

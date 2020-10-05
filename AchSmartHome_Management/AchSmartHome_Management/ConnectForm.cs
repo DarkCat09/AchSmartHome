@@ -25,44 +25,36 @@ namespace AchSmartHome_Management
             }*/
             try
             {
-                #region receiving information about db from file
-                string dbaddr = "", dbname = "", dbport = "", dbuser = "", dbpass = "";
-                string[] dbParamsFromFile = File.ReadAllLines("database.conf");
-                if (dbParamsFromFile.Length > 1)
-                {
-                    dbaddr = dbParamsFromFile[0].Split(new char[] { ';' })[0];
-                    dbname = dbParamsFromFile[0].Split(new char[] { ';' })[1];
-                    dbport = dbParamsFromFile[0].Split(new char[] { ';' })[2];
-                    dbuser = dbParamsFromFile[1].Split(new char[] { ';' })[0];
-                    dbpass = dbParamsFromFile[1].Split(new char[] { ';' })[1];
-                }
-                #endregion
-                string sqlConnect =
-                    "Server=" + ((textBox1.Text.Trim() != "") ? textBox1.Text.Trim() : dbaddr) + ";" +
-                    "Database=" + dbname + ";port=" + dbport + ";" +
-                    "User Id=" + dbuser + ";password=" + dbpass;
-                MySqlConnection sqlDb = new MySqlConnection(sqlConnect);
+                MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb(textBox1.Text);
                 sqlDb.Open();
                 MySqlCommand sqlRequest =
                     new MySqlCommand("SELECT * FROM users WHERE name = \"" + textBox2.Text + "\"", sqlDb);
+
                 DbDataReader dbdr = sqlRequest.ExecuteReader();
                 if (dbdr.HasRows)
                 {
                     dbdr.Read();
                     if (BCrypt.Net.BCrypt.Verify(textBox3.Text, dbdr.GetString(2)))
                     {
-                        _ = MessageBox.Show("Password is correct! \\/");
+                        Form1.userid = dbdr.GetInt32(0);
+                        Form1.username = dbdr.GetString(1);
+                        Form1.userprivs = dbdr.GetInt32(3);
                     }
                     else
                     {
-                        _ = MessageBox.Show("Password is incorrect! ><");
+                        _ = MessageBox.Show("Username or password is incorrect!");
                     }
                 }
+                else
+                {
+                    _ = MessageBox.Show("Username or password is incorrect!");
+                }
+                dbdr.Close();
                 sqlDb.Close();
             }
             catch (Exception ex)
             {
-                _ = MessageBox.Show("Эксепшн!\n" + ex.Message);
+                _ = MessageBox.Show("Error happened!\n" + ex.Message);
             }
             Close();
         }

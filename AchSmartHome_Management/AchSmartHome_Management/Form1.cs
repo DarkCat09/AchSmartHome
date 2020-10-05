@@ -17,6 +17,7 @@
  * along with AchSmartHome.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
 
@@ -24,7 +25,11 @@ namespace AchSmartHome_Management
 {
     public partial class Form1 : Form
     {
+        public static string regusername = "", regpasshash = "";
+        public static string username = "", passhash = "";
+        public static int userid = 0, userprivs = 3;
         public static Panel panel1 = null;
+
         public Form1()
         {
             InitializeComponent();
@@ -37,6 +42,7 @@ namespace AchSmartHome_Management
 
             ReplacePanel<ControlPanel>();
             GlobalSettings.InitThemeAndLang(Controls, this);
+            DatabaseConnecting.ReadDefaultDbParams();
         }
 
         public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
@@ -59,6 +65,27 @@ namespace AchSmartHome_Management
         private void главнаяСтраницаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ReplacePanel<ControlPanel>();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (userprivs == 0)
+            {
+                RegisterUser ruForm = new RegisterUser();
+                ruForm.ShowDialog();
+                MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb();
+                sqlDb.Open();
+                MySqlCommand sqlRequest =
+                    new MySqlCommand("INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)", sqlDb);
+                sqlRequest.Parameters.Add(new MySqlParameter("username", regusername));
+                sqlRequest.Parameters.Add(new MySqlParameter("passhash", regpasshash));
+                sqlRequest.ExecuteNonQuery();
+                sqlDb.Close();
+            }
+            else
+            {
+                _ = MessageBox.Show("Insufficient privileges!");
+            }
         }
 
         private void светToolStripMenuItem_Click(object sender, EventArgs e)

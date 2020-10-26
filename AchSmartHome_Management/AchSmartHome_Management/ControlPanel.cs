@@ -24,10 +24,15 @@ namespace AchSmartHome_Management
 {
     public partial class ControlPanel : UserControl
     {
+        string[] sensorsText = null;
         public ControlPanel()
         {
             InitializeComponent();
             GlobalSettings.InitThemeAndLang(Controls, this);
+
+            sensorsText = new string[6] {
+                label1.Text, label2.Text, label5.Text, linkLabel1.Text, label3.Text, ""
+            };
             GetSensorsValuesAndUpdate(DateTime.Now);
         }
 
@@ -35,24 +40,36 @@ namespace AchSmartHome_Management
         {
             try
             {
+                label1.Text     = sensorsText[0];
+                label2.Text     = sensorsText[1];
+                label5.Text     = sensorsText[2];
+                linkLabel1.Text = sensorsText[3];
+                label3.Text     = sensorsText[4];
+
                 System.Collections.Generic.Dictionary<int, object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
-                    "SELECT * FROM `sensors_values` " +
+                    "SELECT id, valdatetime, IFNULL(temp, 0.00) AS temp, IFNULL(humidity, 0.00) AS humidity " +
+                    "FROM `sensors_values` " +
                     "WHERE valdatetime > ('" + dt.ToString("yyyy-MM-dd") + "') " +
-                    "AND valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY)");
+                    "AND valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY) " +
+                    "ORDER BY id DESC LIMIT 1"
+                );
 
                 if (sqlReqResult.Count > 0)
                 {
-                    label1.Text = Convert.ToDouble(sqlReqResult[2]).ToString() + " °C / " +
+                    label1.Text =
+                        Convert.ToDouble(sqlReqResult[2]).ToString() + " °C / " +
                         ((Convert.ToDouble(sqlReqResult[2]) * 9.00 / 5.00) + 32.00).ToString() + " °F";
 
                     label2.Text = Convert.ToInt32(sqlReqResult[3]).ToString() + "%";
-                    //label3.Text = label3.Text + " " + sqlReqResult[4].ToString();
                 }
 
-                System.Collections.Generic.Dictionary<int, object> sqlReqWateringResult = DatabaseConnecting.ProcessSqlRequest(
-                    "SELECT * FROM `watering` " +
-                    "WHERE valdatetime > ('" + dt.ToString("yyyy-MM-dd") + "') " +
-                    "AND valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY)");
+                System.Collections.Generic.Dictionary<int, object> sqlReqWateringResult =
+                    DatabaseConnecting.ProcessSqlRequest(
+                        "SELECT * FROM `watering` " +
+                        "WHERE valdatetime > ('" + dt.ToString("yyyy-MM-dd") + "') " +
+                        "AND valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY) " +
+                        "ORDER BY id DESC LIMIT 1"
+                    );
 
                 if (sqlReqWateringResult.Count > 0)
                 {

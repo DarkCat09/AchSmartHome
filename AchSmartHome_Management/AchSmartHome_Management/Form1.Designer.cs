@@ -31,6 +31,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.панельToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.соединитьсяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.регистрацияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.управлениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.главнаяСтраницаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.светToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,7 +40,6 @@
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПроектеASHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +51,7 @@
             this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(624, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(381, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -59,6 +59,7 @@
             // 
             this.панельToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.соединитьсяToolStripMenuItem,
+            this.регистрацияToolStripMenuItem,
             this.управлениеToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.панельToolStripMenuItem.Name = "панельToolStripMenuItem";
@@ -73,6 +74,13 @@
             this.соединитьсяToolStripMenuItem.Tag = "Connect";
             this.соединитьсяToolStripMenuItem.Text = "Подключиться";
             this.соединитьсяToolStripMenuItem.Click += new System.EventHandler(this.соединитьсяToolStripMenuItem_Click);
+            // 
+            // регистрацияToolStripMenuItem
+            // 
+            this.регистрацияToolStripMenuItem.Name = "регистрацияToolStripMenuItem";
+            this.регистрацияToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.регистрацияToolStripMenuItem.Text = "Регистрация";
+            this.регистрацияToolStripMenuItem.Click += new System.EventHandler(this.регистрацияToolStripMenuItem_Click);
             // 
             // управлениеToolStripMenuItem
             // 
@@ -141,28 +149,18 @@
             this.оПроектеASHToolStripMenuItem.Tag = "AboutProj";
             this.оПроектеASHToolStripMenuItem.Text = "О проекте ASH";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(521, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(103, 24);
-            this.button1.TabIndex = 1;
-            this.button1.Tag = "Register";
-            this.button1.Text = "Регистрация";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 322);
-            this.Controls.Add(this.button1);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(381, 185);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Tag = "FormTitle";
             this.Text = "Управление умным домом AchSmartHome";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -173,7 +171,6 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripMenuItem панельToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem соединитьсяToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem выходToolStripMenuItem;
@@ -184,6 +181,7 @@
         private System.Windows.Forms.ToolStripMenuItem оПрограммеToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem оПроектеASHToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem регистрацияToolStripMenuItem;
     }
 }
 

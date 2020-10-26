@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.IO;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -25,6 +24,7 @@ namespace AchSmartHome_Management
             }*/
             try
             {
+                /*
                 MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb(textBox1.Text);
                 sqlDb.Open();
                 MySqlCommand sqlRequest =
@@ -51,6 +51,25 @@ namespace AchSmartHome_Management
                 }
                 dbdr.Close();
                 sqlDb.Close();
+                */
+                System.Collections.Generic.Dictionary<int, object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest("SELECT * FROM users WHERE name = \"" + textBox2.Text + "\"");
+                if (sqlReqResult.Count > 0)
+                {
+                    if (BCrypt.Net.BCrypt.Verify(textBox3.Text, sqlReqResult[2].ToString()))
+                    {
+                        Form1.userid = Convert.ToInt32(sqlReqResult[0]);
+                        Form1.username = sqlReqResult[1].ToString();
+                        Form1.userprivs = Convert.ToInt32(sqlReqResult[3]);
+                    }
+                    else
+                    {
+                        _ = MessageBox.Show("Username or password is incorrect!");
+                    }
+                }
+                else
+                {
+                    _ = MessageBox.Show("Username or password is incorrect!");
+                }
             }
             catch (Exception ex)
             {

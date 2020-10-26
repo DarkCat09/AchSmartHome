@@ -92,6 +92,12 @@
     <Compile Include="LightPanel.Designer.cs">
       <DependentUpon>LightPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="OtherSensorsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OtherSensorsPanel.Designer.cs">
+      <DependentUpon>OtherSensorsPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterUser.cs">
@@ -118,6 +124,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LightPanel.resx">
       <DependentUpon>LightPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OtherSensorsPanel.resx">
+      <DependentUpon>OtherSensorsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -164,6 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="pictures\lamp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pictures\smoke.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

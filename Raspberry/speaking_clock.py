@@ -45,10 +45,12 @@ try:
 					mixer.music.play()
 					while mixer.music.get_busy():
 						time.sleep(0.01)
-					mixer.stop()
+					mixer.music.stop()
 					mixer.quit()
+					time.sleep(0.01)
 					if os.path.exists("time.mp3"):
 						os.remove("time.mp3")
+					time.sleep(0.01)
 			except Exception as ex:
 				print("")
 				print("Error happened!", \

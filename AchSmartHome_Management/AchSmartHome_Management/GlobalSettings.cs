@@ -80,8 +80,8 @@ namespace AchSmartHome_Management
                             {
                                 if (!(panelctrl is Button) && !(panelctrl is ComboBox) && !(panelctrl is MenuStrip) && !(panelctrl is TableLayoutPanel))
                                     panelctrl.ForeColor = GlobalSettings.fontcol;
-                                if (ctrl is LinkLabel)
-                                    ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
+                                if (panelctrl is LinkLabel)
+                                    ((LinkLabel)panelctrl).LinkColor = GlobalSettings.fontcol;
 
                                 if (panelctrl.Tag != null)
                                 {
@@ -95,8 +95,8 @@ namespace AchSmartHome_Management
 
                         if (!(tablectrl is Button) && !(tablectrl is ComboBox) && !(tablectrl is MenuStrip) && !(tablectrl is TableLayoutPanel))
                             tablectrl.ForeColor = GlobalSettings.fontcol;
-                        if (ctrl is LinkLabel)
-                            ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
+                        if (tablectrl is LinkLabel)
+                            ((LinkLabel)tablectrl).LinkColor = GlobalSettings.fontcol;
 
                         if (tablectrl.Tag != null)
                         {

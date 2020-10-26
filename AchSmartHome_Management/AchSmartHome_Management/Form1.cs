@@ -34,6 +34,9 @@ namespace AchSmartHome_Management
         {
             InitializeComponent();
 
+            DatabaseConnecting.ReadDefaultDbParams();
+            DatabaseConnecting.ConnectToDb();
+
             panel1 = new Panel();
             panel1.Name = "panel1";
             panel1.Location = new System.Drawing.Point(13, 28);
@@ -42,7 +45,6 @@ namespace AchSmartHome_Management
 
             ReplacePanel<ControlPanel>();
             GlobalSettings.InitThemeAndLang(Controls, this);
-            DatabaseConnecting.ReadDefaultDbParams();
         }
 
         public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
@@ -67,24 +69,37 @@ namespace AchSmartHome_Management
             ReplacePanel<ControlPanel>();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DatabaseConnecting.sqlDb.Close();
+        }
+
+        private void регистрацияToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (userprivs == 0)
             {
                 RegisterUser ruForm = new RegisterUser();
                 ruForm.ShowDialog();
-                MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb();
+
+                /*MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb();
                 sqlDb.Open();
                 MySqlCommand sqlRequest =
                     new MySqlCommand("INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)", sqlDb);
                 sqlRequest.Parameters.Add(new MySqlParameter("username", regusername));
                 sqlRequest.Parameters.Add(new MySqlParameter("passhash", regpasshash));
                 sqlRequest.ExecuteNonQuery();
-                sqlDb.Close();
+                sqlDb.Close();*/
+
+                DatabaseConnecting.ProcessSqlRequest(
+                    "INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)",
+                    new System.Collections.Generic.List<MySqlParameter>() {
+                        new MySqlParameter("username", regusername), new MySqlParameter("passhash", regpasshash)
+                    }, true
+                );
             }
             else
             {
-                _ = MessageBox.Show("Insufficient privileges!");
+                _ = MessageBox.Show((Languages.curlang == "RU") ? "Недостаточно привелегий!" : "Insufficient privileges!");
             }
         }
 

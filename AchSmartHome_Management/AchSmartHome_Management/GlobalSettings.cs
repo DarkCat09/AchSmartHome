@@ -63,10 +63,30 @@ namespace AchSmartHome_Management
             f.BackColor = theme;
             foreach (Control ctrl in ctrls)
             {
-                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is MenuStrip) && !(ctrl is TableLayoutPanel))
+                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is MenuStrip) && !(ctrl is TableLayoutPanel) && !(ctrl is Panel))
                     ctrl.ForeColor = GlobalSettings.fontcol;
                 if (ctrl is LinkLabel)
                     ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
+
+                //for Panel
+                if (ctrl is Panel)
+                {
+                    foreach (Control panelctrl in ((Panel)ctrl).Controls)
+                    {
+                        if (!(panelctrl is Button) && !(panelctrl is ComboBox) && !(panelctrl is MenuStrip) && !(panelctrl is TableLayoutPanel))
+                            panelctrl.ForeColor = GlobalSettings.fontcol;
+                        if (panelctrl is LinkLabel)
+                            ((LinkLabel)panelctrl).LinkColor = GlobalSettings.fontcol;
+
+                        if (panelctrl.Tag != null)
+                        {
+                            if (Languages.Lang.ContainsKey(panelctrl.Tag.ToString()))
+                            {
+                                panelctrl.Text = Languages.Lang[panelctrl.Tag.ToString()];
+                            }
+                        }
+                    }
+                }
 
                 //for TableLayoutPanel
                 if (ctrl is TableLayoutPanel)

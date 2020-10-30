@@ -43,8 +43,8 @@ namespace AchSmartHome_Management
             panel1.AutoSize = true;
             Controls.Add(panel1);
 
-            ReplacePanel<ControlPanel>();
             GlobalSettings.InitThemeAndLang(Controls, this);
+            ReplacePanel<ControlPanel>();
         }
 
         public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
@@ -81,15 +81,6 @@ namespace AchSmartHome_Management
                 RegisterUser ruForm = new RegisterUser();
                 ruForm.ShowDialog();
 
-                /*MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb();
-                sqlDb.Open();
-                MySqlCommand sqlRequest =
-                    new MySqlCommand("INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)", sqlDb);
-                sqlRequest.Parameters.Add(new MySqlParameter("username", regusername));
-                sqlRequest.Parameters.Add(new MySqlParameter("passhash", regpasshash));
-                sqlRequest.ExecuteNonQuery();
-                sqlDb.Close();*/
-
                 DatabaseConnecting.ProcessSqlRequest(
                     "INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)",
                     new System.Collections.Generic.List<MySqlParameter>() {
@@ -110,7 +101,8 @@ namespace AchSmartHome_Management
 
         private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ReplacePanel<SettingsForm>();
+            panel1.Controls.Clear();
+            panel1.Controls.Add(new SettingsForm(this));
         }
     }
 }

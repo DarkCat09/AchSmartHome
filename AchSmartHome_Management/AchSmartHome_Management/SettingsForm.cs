@@ -25,7 +25,8 @@ namespace AchSmartHome_Management
 {
     public partial class SettingsForm : UserControl
     {
-        public SettingsForm()
+        Form startForm = null;
+        public SettingsForm(Form _startForm = null)
         {
             InitializeComponent();
             this.BackColor = GlobalSettings.theme;
@@ -37,49 +38,21 @@ namespace AchSmartHome_Management
             {
                 comboBox1.Items.Add(key);
             }
+
+            startForm = _startForm;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ApplyNewSettings(bool replacePanelToHome = true)
         {
-            /*
-            Languages.curlang =
-                (comboBox1.SelectedItem != null) ? comboBox1.Text.ToString() : Languages.curlang;
-
-            GlobalSettings.theme =
-                (comboBox2.SelectedItem != null) ? (
-                (comboBox2.SelectedItem.ToString() == "Light")	? Color.FromName("Control")		:
-                (comboBox2.SelectedItem.ToString() == "Dark")	? Color.FromArgb(64, 64, 64)	:
-                (comboBox2.SelectedItem.ToString() == "Green")	? Color.FromName("SeaGreen")	:
-                (comboBox2.SelectedItem.ToString() == "Cyan")	? Color.FromName("DarkCyan")	:
-                (comboBox2.SelectedItem.ToString() == "Pink")	? Color.FromName("Pink")		:
-                (comboBox2.SelectedItem.ToString() == "Orange") ? Color.FromName("DarkOrange")	:
-                (comboBox2.SelectedItem.ToString() == "Maroon") ? Color.FromName("Maroon")		:
-                Color.FromName("Control")) : GlobalSettings.theme;
-
-            GlobalSettings.fontcol =
-                (comboBox2.SelectedItem != null) ? (
-                (comboBox2.SelectedItem.ToString() == "Light")	? Color.FromName("ControlText")		:
-                (comboBox2.SelectedItem.ToString() == "Dark")	? Color.FromName("HighlightText")	:
-                (comboBox2.SelectedItem.ToString() == "Green")	? Color.FromName("ControlText")		:
-                (comboBox2.SelectedItem.ToString() == "Cyan")	? Color.FromName("HighlightText")	:
-                (comboBox2.SelectedItem.ToString() == "Pink")	? Color.FromName("ControlText")		:
-                (comboBox2.SelectedItem.ToString() == "Orange")	? Color.FromName("HighlightText")	:
-                (comboBox2.SelectedItem.ToString() == "Maroon")	? Color.FromName("HighlightText")	:
-                Color.FromName("ControlText")) : GlobalSettings.fontcol;
-
-            GlobalSettings.minimizeToTray = checkBox1.Checked;
-            GlobalSettings.dontWorkInBackground = checkBox2.Checked;
-            */
-
             GlobalSettings.ChangeSettings(
                 (comboBox1.SelectedItem != null) ? comboBox1.Text.ToString() : Languages.curlang,
 
                 (comboBox2.SelectedItem != null) ? (
-                (comboBox2.SelectedItem.ToString() == "Light")  ? Color.FromName("Control")     :
-                (comboBox2.SelectedItem.ToString() == "Dark")   ? Color.FromArgb(64, 64, 64)    :
-                (comboBox2.SelectedItem.ToString() == "Green")  ? Color.FromName("SeaGreen")    :
-                (comboBox2.SelectedItem.ToString() == "Cyan")   ? Color.FromName("DarkCyan")    :
-                (comboBox2.SelectedItem.ToString() == "Pink")   ? Color.FromName("Pink")        :
+                (comboBox2.SelectedItem.ToString() == "Light") ? Color.FromName("Control")      :
+                (comboBox2.SelectedItem.ToString() == "Dark") ? Color.FromArgb(64, 64, 64)      :
+                (comboBox2.SelectedItem.ToString() == "Green") ? Color.FromName("SeaGreen")     :
+                (comboBox2.SelectedItem.ToString() == "Cyan") ? Color.FromName("DarkCyan")      :
+                (comboBox2.SelectedItem.ToString() == "Pink") ? Color.FromName("Pink")          :
                 (comboBox2.SelectedItem.ToString() == "Orange") ? Color.FromName("DarkOrange")  :
                 (comboBox2.SelectedItem.ToString() == "Maroon") ? Color.FromName("Maroon")      :
                 Color.FromName("Control")) : GlobalSettings.theme,
@@ -96,16 +69,31 @@ namespace AchSmartHome_Management
 
                 checkBox1.Checked, checkBox2.Checked
             );
-            MessageBox.Show(
-                (Languages.curlang == "RU") ?
-                "Для полного изменения темы и языка\n" +
-                "нажмите в этом сообщении OK и\nперезапустите приложение." :
-                "To completely change the theme and language\n" +
-                "click in this message OK and\nrestart the application.",
-                (Languages.curlang == "RU") ? "Изменение настроек" : "Changing settings",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning
-            );
-            Form1.ReplacePanel<ControlPanel>();
+
+            if (startForm == null)
+            {
+                MessageBox.Show(
+                    (Languages.curlang == "RU") ?
+                    "Для полного изменения темы и языка\n" +
+                    "нажмите в этом сообщении OK и\nперезапустите приложение." :
+                    "To completely change the theme and language\n" +
+                    "click in this message OK and\nrestart the application.",
+                    (Languages.curlang == "RU") ? "Изменение настроек" : "Changing settings",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning
+                );
+            }
+            else
+            {
+                GlobalSettings.InitThemeAndLang(startForm.Controls, startForm);
+            }
+
+            if (replacePanelToHome)
+                Form1.ReplacePanel<ControlPanel>();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ApplyNewSettings(true);
         }
     }
 }

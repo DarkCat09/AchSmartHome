@@ -52,7 +52,7 @@ namespace AchSmartHome_Management
                 dbdr.Close();
                 sqlDb.Close();
                 */
-                System.Collections.Generic.Dictionary<int, object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest("SELECT * FROM users WHERE name = \"" + textBox2.Text + "\"");
+                System.Collections.Generic.List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest("SELECT * FROM users WHERE name = \"" + textBox2.Text + "\"");
                 if (sqlReqResult.Count > 0)
                 {
                     if (BCrypt.Net.BCrypt.Verify(textBox3.Text, sqlReqResult[2].ToString()))

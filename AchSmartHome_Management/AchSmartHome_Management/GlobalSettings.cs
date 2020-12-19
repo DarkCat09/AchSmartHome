@@ -28,13 +28,15 @@ namespace AchSmartHome_Management
         public static System.Drawing.Color fontcol = Properties.Settings.Default.font_color;
         public static bool minimizeToTray = Properties.Settings.Default.min_to_tray;
         public static bool dontWorkInBackground = Properties.Settings.Default.dont_work_in_bg;
+        public static bool autoUpdateSensorsVals = Properties.Settings.Default.auto_upd_values;
 
         public static void ChangeSettings(
             string _language,
             System.Drawing.Color _theme,
             System.Drawing.Color _fontcol,
             bool _minToTray,
-            bool _dontWorkInBg
+            bool _dontWorkInBg,
+            bool _autoUpdSensorsVals
         )
         {
             // update local settings
@@ -43,12 +45,14 @@ namespace AchSmartHome_Management
             fontcol = _fontcol;
             minimizeToTray = _minToTray;
             dontWorkInBackground = _dontWorkInBg;
+            autoUpdateSensorsVals = _autoUpdSensorsVals;
 
             // update settings in special file
             Properties.Settings.Default.theme = _theme;
             Properties.Settings.Default.font_color = _fontcol;
             Properties.Settings.Default.min_to_tray = _minToTray;
             Properties.Settings.Default.dont_work_in_bg = _dontWorkInBg;
+            Properties.Settings.Default.auto_upd_values = _autoUpdSensorsVals;
             Properties.Settings.Default.language = _language;
             Properties.Settings.Default.Save();
         }
@@ -63,7 +67,7 @@ namespace AchSmartHome_Management
             f.BackColor = theme;
             foreach (Control ctrl in ctrls)
             {
-                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is MenuStrip) && !(ctrl is TableLayoutPanel) && !(ctrl is Panel))
+                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is MenuStrip) && !(ctrl is TableLayoutPanel) && !(ctrl is Panel) && !(ctrl is DataGridView))
                     ctrl.ForeColor = GlobalSettings.fontcol;
                 if (ctrl is LinkLabel)
                     ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;

@@ -39,12 +39,19 @@ namespace AchSmartHome_Management
                 comboBox1.Items.Add(key);
             }
 
+            comboBox1.SelectedItem = Languages.curlang;
+            //comboBox2.SelectedItem = GlobalSettings.theme;
+            checkBox1.Checked = GlobalSettings.minimizeToTray;
+            checkBox2.Checked = GlobalSettings.dontWorkInBackground;
+            checkBox3.Checked = GlobalSettings.autoUpdateSensorsVals;
+
             startForm = _startForm;
         }
 
         private void ApplyNewSettings(bool replacePanelToHome = true)
         {
             GlobalSettings.ChangeSettings(
+
                 (comboBox1.SelectedItem != null) ? comboBox1.Text.ToString() : Languages.curlang,
 
                 (comboBox2.SelectedItem != null) ? (
@@ -67,7 +74,7 @@ namespace AchSmartHome_Management
                 (comboBox2.SelectedItem.ToString() == "Maroon") ? Color.FromName("HighlightText")   :
                 Color.FromName("ControlText")) : GlobalSettings.fontcol,
 
-                checkBox1.Checked, checkBox2.Checked
+                checkBox1.Checked, checkBox2.Checked, checkBox3.Checked
             );
 
             if (startForm == null)

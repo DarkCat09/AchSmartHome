@@ -92,5 +92,10 @@ namespace AchSmartHome_Management
 
             return 0;
         }
+
+        public static string GetLocalizedString(string dicKey, string defaultString = "")
+        {
+            return (Languages.Lang.ContainsKey(dicKey)) ? Languages.Lang[dicKey] : defaultString;
+        }
     }
 }

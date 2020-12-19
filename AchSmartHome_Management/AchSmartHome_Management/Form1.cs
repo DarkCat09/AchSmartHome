@@ -17,9 +17,9 @@
  * along with AchSmartHome.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace AchSmartHome_Management
 {
@@ -35,7 +35,14 @@ namespace AchSmartHome_Management
             InitializeComponent();
 
             DatabaseConnecting.ReadDefaultDbParams();
-            DatabaseConnecting.ConnectToDb();
+            if (!DatabaseConnecting.ConnectToDb())
+            {
+                MessageBox.Show(
+                    "Error happened while connecting to database! Application will be closed.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error
+                );
+                Close();
+            };
 
             panel1 = new Panel();
             panel1.Name = "panel1";
@@ -71,6 +78,7 @@ namespace AchSmartHome_Management
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Logging.DeleteLogFile();
             DatabaseConnecting.sqlDb.Close();
         }
 

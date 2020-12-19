@@ -25,10 +25,24 @@ namespace AchSmartHome_Management
     public partial class ControlPanel : UserControl
     {
         string[] sensorsText = null;
+        ToolTip[] sensorsToolTips = null;
         public ControlPanel()
         {
             InitializeComponent();
             GlobalSettings.InitThemeAndLang(Controls, this);
+
+            sensorsToolTips = new ToolTip[6];
+            for (int i = 0; i < 6; i++)
+            {
+                sensorsToolTips[i] = new ToolTip();
+            }
+
+            foreach (ToolTip tt in sensorsToolTips)
+            {
+                tt.ToolTipTitle =
+                    sensorsToolTips[0].ToolTipTitle = Languages.GetLocalizedString("LastUpdate", "Last Update: ");
+                tt.IsBalloon = true;
+            }
 
             sensorsText = new string[6] {
                 label1.Text, label2.Text, label5.Text, linkLabel1.Text, label3.Text, ""
@@ -38,6 +52,7 @@ namespace AchSmartHome_Management
 
         private void GetSensorsValuesAndUpdate(DateTime dt)
         {
+            Logging.LogEvent(0, "Updating main sensors values... DT = " + dt.ToString("dd.MM.yyyy,HH:mm"));
             try
             {
                 label1.Text     = sensorsText[0];
@@ -46,11 +61,10 @@ namespace AchSmartHome_Management
                 linkLabel1.Text = sensorsText[3];
                 label3.Text     = sensorsText[4];
 
-                System.Collections.Generic.Dictionary<int, object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
+                System.Collections.Generic.List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
                     "SELECT id, valdatetime, IFNULL(temp, 0.00) AS temp, IFNULL(humidity, 0.00) AS humidity " +
                     "FROM `sensors_values` " +
-                    "WHERE valdatetime > ('" + dt.ToString("yyyy-MM-dd") + "') " +
-                    "AND valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY) " +
+                    "WHERE valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY) " +
                     "ORDER BY id DESC LIMIT 1"
                 );
 
@@ -60,10 +74,18 @@ namespace AchSmartHome_Management
                         Convert.ToDouble(sqlReqResult[2]).ToString() + " °C / " +
                         ((Convert.ToDouble(sqlReqResult[2]) * 9.00 / 5.00) + 32.00).ToString() + " °F";
 
+                    sensorsToolTips[0].SetToolTip(
+                        label1, sensorsToolTips[0].ToolTipTitle + sqlReqResult[1].ToString()
+                    );
+
                     label2.Text = Convert.ToInt32(sqlReqResult[3]).ToString() + "%";
+
+                    sensorsToolTips[1].SetToolTip(
+                        label2, sensorsToolTips[1].ToolTipTitle + sqlReqResult[1].ToString()
+                    );
                 }
 
-                System.Collections.Generic.Dictionary<int, object> sqlReqWateringResult =
+                System.Collections.Generic.List<object> sqlReqWateringResult =
                     DatabaseConnecting.ProcessSqlRequest(
                         "SELECT * FROM `watering` " +
                         "WHERE valdatetime > ('" + dt.ToString("yyyy-MM-dd") + "') " +
@@ -78,6 +100,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
+                Logging.LogEvent(3, "Error happened while updating main sensors values!\n" + ex.ToString());
                 _ = MessageBox.Show("Произошла ошибка!\n" + ex.Message);
             }
         }
@@ -95,6 +118,12 @@ namespace AchSmartHome_Management
         private void button1_Click(object sender, EventArgs e)
         {
             Form1.ReplacePanel<OtherSensorsPanel>();
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            if (GlobalSettings.autoUpdateSensorsVals)
+                GetSensorsValuesAndUpdate(dateTimePicker1.Value);
         }
     }
 }

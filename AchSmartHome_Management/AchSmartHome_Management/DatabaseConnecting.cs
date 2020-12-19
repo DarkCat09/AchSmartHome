@@ -28,6 +28,7 @@ namespace AchSmartHome_Management
 {
     class DatabaseConnecting
     {
+        public static string smartHomeServer = "";
         public static string dbaddr = "", dbname = "", dbport = "", dbuser = "", dbpass = "";
         public static MySqlConnection sqlDb = null;
         public static void ReadDefaultDbParams()
@@ -44,45 +45,76 @@ namespace AchSmartHome_Management
                     dbpass = dbParamsFromFile[1].Split(new char[] { ';' })[1];
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logging.LogEvent(3, "Can\'t read database params!\n" + ex.ToString());
                 _ = MessageBox.Show("Error happened while reading database parameters!");
             }
         }
-        public static void ConnectToDb(string advancedServer = "")
+        public static bool ConnectToDb(string advancedServer = "")
         {
-            sqlDb = new MySqlConnection(
-                    "Server=" + ((advancedServer.Trim() != "") ? advancedServer.Trim() : dbaddr) + ";" +
-                    "Database=" + dbname + ";port=" + dbport + ";" +
-                    "User Id=" + dbuser + ";password=" + dbpass);
-            sqlDb.Open();
+            try
+            {
+                smartHomeServer = ((advancedServer.Trim() != "") ? advancedServer.Trim() : dbaddr);
+                sqlDb = new MySqlConnection(
+                        "Server=" + smartHomeServer + ";" +
+                        "Database=" + dbname + ";port=" + dbport + ";" +
+                        "User Id=" + dbuser + ";password=" + dbpass);
+                sqlDb.Open();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logging.LogEvent(4, "Can\'t connect to server! Exiting!\n" + ex.ToString());
+                return false;
+            }
         }
-        public static Dictionary<int, object> ProcessSqlRequest(string sqlRequest, List<MySqlParameter> sqlReqParams = null)
+        public static List<object> ProcessSqlRequest(string sqlRequest, List<MySqlParameter> sqlReqParams = null)
         {
+            string paramsForLog = "";
             if (sqlReqParams == null)
                 sqlReqParams = new List<MySqlParameter>();
-            Dictionary<int, object> sqlReqResult = new Dictionary<int, object>();
-            MySqlCommand sqlCommand = new MySqlCommand(sqlRequest, sqlDb);
-            if (sqlReqParams.Count > 0)
+            List<object> sqlReqResult = new List<object>();
+            try
             {
-                foreach (MySqlParameter sqlCommandParam in sqlReqParams)
+                MySqlCommand sqlCommand = new MySqlCommand(sqlRequest, sqlDb);
+                if (sqlReqParams.Count > 0)
                 {
-                    sqlCommand.Parameters.Add(sqlCommandParam);
+                    foreach (MySqlParameter sqlCommandParam in sqlReqParams)
+                    {
+                        paramsForLog += (
+                            sqlCommandParam.MySqlDbType.ToString() + " " +
+                            sqlCommandParam.ParameterName + " = " + sqlCommandParam.Value + "\n"
+                        );
+                        sqlCommand.Parameters.Add(sqlCommandParam);
+                    }
                 }
+                Logging.LogEvent(
+                    0, "Executing SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                );
+                DbDataReader dbdr = sqlCommand.ExecuteReader();
+                int read_index = 0;
+                while (dbdr.Read())
+                {
+                    Logging.LogEvent(
+                        1, "DataRead Iteration #" + read_index.ToString() +
+                        ", FieldCount: " + dbdr.FieldCount
+                    );
+                    for (int i = 0; i < dbdr.FieldCount; i++)
+                    {
+                        sqlReqResult.Add(dbdr.GetValue(i));
+                    }
+                    read_index++;
+                }
+                dbdr.Close();
             }
-            DbDataReader dbdr = sqlCommand.ExecuteReader();
-            dbdr.Read();
-            if (dbdr.HasRows)
+            catch (Exception ex)
             {
-                for (int i = 0; i < dbdr.FieldCount; i++)
-                {
-                    sqlReqResult.Add(i, dbdr.GetValue(i));
-                }
+                Logging.LogEvent(3, "Error happened while executing SQL-request:\n" + ex.ToString());
             }
-            dbdr.Close();
             return sqlReqResult;
         }
-        public static Dictionary<int, object> ProcessSqlRequest(string sqlRequest, List<MySqlParameter> sqlReqParams, bool dontRetResult)
+        public static List<object> ProcessSqlRequest(string sqlRequest, List<MySqlParameter> sqlReqParams, bool dontRetResult)
         {
             if (!dontRetResult)
             {
@@ -90,17 +122,32 @@ namespace AchSmartHome_Management
             }
             else
             {
+                string paramsForLog = "";
                 if (sqlReqParams == null)
                     sqlReqParams = new List<MySqlParameter>();
-                MySqlCommand sqlCommand = new MySqlCommand(sqlRequest, sqlDb);
-                if (sqlReqParams.Count > 0)
+                try
                 {
-                    foreach (MySqlParameter sqlCommandParam in sqlReqParams)
+                    MySqlCommand sqlCommand = new MySqlCommand(sqlRequest, sqlDb);
+                    if (sqlReqParams.Count > 0)
                     {
-                        sqlCommand.Parameters.Add(sqlCommandParam);
+                        foreach (MySqlParameter sqlCommandParam in sqlReqParams)
+                        {
+                            paramsForLog += (
+                                sqlCommandParam.MySqlDbType.ToString() + " " +
+                                sqlCommandParam.ParameterName + " = " + sqlCommandParam.Value + "\n"
+                            );
+                            sqlCommand.Parameters.Add(sqlCommandParam);
+                        }
                     }
+                    Logging.LogEvent(
+                        0, "Executing DDR SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                    );
+                    sqlCommand.ExecuteNonQuery();
                 }
-                sqlCommand.ExecuteNonQuery();
+                catch (Exception ex)
+                {
+                    Logging.LogEvent(3, "Error happened while executing DRR SQL-request!\n" + ex.ToString());
+                }
                 return null;
             }
         }

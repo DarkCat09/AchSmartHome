@@ -85,6 +85,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="HomeSensor.cs" />
     <Compile Include="Languages.cs" />
     <Compile Include="LightPanel.cs">
       <SubType>UserControl</SubType>
@@ -92,6 +93,7 @@
     <Compile Include="LightPanel.Designer.cs">
       <DependentUpon>LightPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logging.cs" />
     <Compile Include="OtherSensorsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

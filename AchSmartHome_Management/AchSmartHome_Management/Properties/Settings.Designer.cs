@@ -82,5 +82,17 @@ namespace AchSmartHome_Management.Properties {
                 this["language"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool auto_upd_values {
+            get {
+                return ((bool)(this["auto_upd_values"]));
+            }
+            set {
+                this["auto_upd_values"] = value;
+            }
+        }
     }
 }

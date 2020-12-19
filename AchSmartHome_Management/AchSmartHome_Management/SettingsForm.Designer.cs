@@ -37,6 +37,7 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,11 +100,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox3);
             this.groupBox1.Controls.Add(this.checkBox2);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Location = new System.Drawing.Point(16, 86);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(359, 66);
+            this.groupBox1.Size = new System.Drawing.Size(359, 92);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Tag = "AdvancedSettings";
@@ -133,13 +135,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(300, 158);
+            this.button1.Location = new System.Drawing.Point(300, 184);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(75, 25);
             this.button1.TabIndex = 7;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(6, 66);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(301, 17);
+            this.checkBox3.TabIndex = 8;
+            this.checkBox3.Text = "Автоматически обновлять показания при смене даты";
+            this.checkBox3.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -155,7 +167,7 @@
             this.Controls.Add(this.label1);
             this.MaximumSize = new System.Drawing.Size(403, 253);
             this.Name = "SettingsForm";
-            this.Size = new System.Drawing.Size(387, 188);
+            this.Size = new System.Drawing.Size(387, 215);
             this.Tag = "Settings";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -175,5 +187,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox3;
     }
 }

@@ -40,7 +40,14 @@
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПроектеASHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelNameLabel = new System.Windows.Forms.Label();
+            this.goNextLabel = new System.Windows.Forms.Label();
+            this.goBackLabel = new System.Windows.Forms.Label();
+            this.VSeparator1 = new System.Windows.Forms.Label();
+            this.VSeparator2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -149,12 +156,88 @@
             this.оПроектеASHToolStripMenuItem.Tag = "AboutProj";
             this.оПроектеASHToolStripMenuItem.Text = "О проекте ASH";
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.VSeparator2);
+            this.panel3.Controls.Add(this.VSeparator1);
+            this.panel3.Controls.Add(this.panelNameLabel);
+            this.panel3.Controls.Add(this.goNextLabel);
+            this.panel3.Controls.Add(this.goBackLabel);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 24);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(381, 29);
+            this.panel3.TabIndex = 2;
+            // 
+            // panelNameLabel
+            // 
+            this.panelNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelNameLabel.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.panelNameLabel.Location = new System.Drawing.Point(32, 0);
+            this.panelNameLabel.Name = "panelNameLabel";
+            this.panelNameLabel.Size = new System.Drawing.Size(317, 29);
+            this.panelNameLabel.TabIndex = 2;
+            this.panelNameLabel.Text = "Главная панель";
+            this.panelNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panelNameLabel.Click += new System.EventHandler(this.panelNameLabel_Click);
+            // 
+            // goNextLabel
+            // 
+            this.goNextLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.goNextLabel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.goNextLabel.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.goNextLabel.Location = new System.Drawing.Point(349, 0);
+            this.goNextLabel.Name = "goNextLabel";
+            this.goNextLabel.Size = new System.Drawing.Size(32, 29);
+            this.goNextLabel.TabIndex = 1;
+            this.goNextLabel.Text = ">";
+            this.goNextLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.goNextLabel.Click += new System.EventHandler(this.goNextLabel_Click);
+            // 
+            // goBackLabel
+            // 
+            this.goBackLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.goBackLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.goBackLabel.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.goBackLabel.Location = new System.Drawing.Point(0, 0);
+            this.goBackLabel.Name = "goBackLabel";
+            this.goBackLabel.Size = new System.Drawing.Size(32, 29);
+            this.goBackLabel.TabIndex = 0;
+            this.goBackLabel.Text = "<";
+            this.goBackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.goBackLabel.Click += new System.EventHandler(this.goBackLabel_Click);
+            // 
+            // VSeparator1
+            // 
+            this.VSeparator1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.VSeparator1.Font = new System.Drawing.Font("Lucida Sans Unicode", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.VSeparator1.ForeColor = System.Drawing.Color.Silver;
+            this.VSeparator1.Location = new System.Drawing.Point(32, 0);
+            this.VSeparator1.Name = "VSeparator1";
+            this.VSeparator1.Size = new System.Drawing.Size(18, 29);
+            this.VSeparator1.TabIndex = 3;
+            this.VSeparator1.Text = "|";
+            this.VSeparator1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // VSeparator2
+            // 
+            this.VSeparator2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.VSeparator2.Font = new System.Drawing.Font("Lucida Sans Unicode", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.VSeparator2.ForeColor = System.Drawing.Color.Silver;
+            this.VSeparator2.Location = new System.Drawing.Point(331, 0);
+            this.VSeparator2.Name = "VSeparator2";
+            this.VSeparator2.Size = new System.Drawing.Size(18, 29);
+            this.VSeparator2.TabIndex = 4;
+            this.VSeparator2.Text = "|";
+            this.VSeparator2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(381, 185);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -163,6 +246,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,6 +266,12 @@
         private System.Windows.Forms.ToolStripMenuItem оПроектеASHToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem регистрацияToolStripMenuItem;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label goNextLabel;
+        private System.Windows.Forms.Label goBackLabel;
+        private System.Windows.Forms.Label panelNameLabel;
+        private System.Windows.Forms.Label VSeparator2;
+        private System.Windows.Forms.Label VSeparator1;
     }
 }
 

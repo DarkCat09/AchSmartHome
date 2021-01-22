@@ -19,6 +19,7 @@
 
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
 namespace AchSmartHome_Management
@@ -30,8 +31,8 @@ namespace AchSmartHome_Management
         public static int userid = 0, userprivs = 3;
         public static Panel panel1 = null;
 
-        private static int prevPanelType = -1;
-        private static int nextPanelType = -1;
+        private static MyStack<int> prevPanelsType = new MyStack<int>();
+        private static MyStack<int> nextPanelsType = new MyStack<int>();
 
         public Form1()
         {
@@ -61,7 +62,7 @@ namespace AchSmartHome_Management
         public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
         {
             if (panel1.Controls.Count > 0)
-                prevPanelType = GetPanelType(panel1.Controls[0]);
+                prevPanelsType.Unshift(GetPanelType(panel1.Controls[0]));
             panel1.Controls.Clear();
             panel1.Controls.Add(new panelToAdd());
         }
@@ -99,7 +100,7 @@ namespace AchSmartHome_Management
 
                 DatabaseConnecting.ProcessSqlRequest(
                     "INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)",
-                    new System.Collections.Generic.List<MySqlParameter>() {
+                    new List<MySqlParameter>() {
                         new MySqlParameter("username", regusername), new MySqlParameter("passhash", regpasshash)
                     }, true
                 );
@@ -123,50 +124,64 @@ namespace AchSmartHome_Management
 
         private void goBackLabel_Click(object sender, EventArgs e)
         {
-            int beforeBackPanel = GetPanelType(panel1.Controls[0]);
-            if (beforeBackPanel == prevPanelType || prevPanelType < 0)
-                return;
-            switch (prevPanelType)
+            try
             {
-                case 0:
-                    ReplacePanel<ControlPanel>();
-                    break;
-                case 1:
-                    ReplacePanel<LightPanel>();
-                    break;
-                case 2:
-                    ReplacePanel<OtherSensorsPanel>();
-                    break;
-                case 3:
-                    panel1.Controls.Clear();
-                    panel1.Controls.Add(new SettingsForm(this));
-                    break;
+                int beforeBackPanel = GetPanelType(panel1.Controls[0]);
+                int prevPanelType = prevPanelsType.Peek();
+
+                if (beforeBackPanel == prevPanelType || prevPanelType < 0)
+                    return;
+                switch (prevPanelType)
+                {
+                    case 0:
+                        ReplacePanel<ControlPanel>();
+                        break;
+                    case 1:
+                        ReplacePanel<LightPanel>();
+                        break;
+                    case 2:
+                        ReplacePanel<OtherSensorsPanel>();
+                        break;
+                    case 3:
+                        panel1.Controls.Clear();
+                        panel1.Controls.Add(new SettingsForm(this));
+                        break;
+                }
+                nextPanelsType.Push(beforeBackPanel);
+                prevPanelsType.Pop();
             }
-            nextPanelType = beforeBackPanel;
+            catch (InvalidOperationException) {}
         }
 
         private void goNextLabel_Click(object sender, EventArgs e)
         {
-            int beforeNextPanel = GetPanelType(panel1.Controls[0]);
-            if (beforeNextPanel == nextPanelType || nextPanelType < 0)
-                return;
-            switch (nextPanelType)
+            try
             {
-                case 0:
-                    ReplacePanel<ControlPanel>();
-                    break;
-                case 1:
-                    ReplacePanel<LightPanel>();
-                    break;
-                case 2:
-                    ReplacePanel<OtherSensorsPanel>();
-                    break;
-                case 3:
-                    panel1.Controls.Clear();
-                    panel1.Controls.Add(new SettingsForm(this));
-                    break;
+                int beforeNextPanel = GetPanelType(panel1.Controls[0]);
+                int nextPanelType = nextPanelsType.Peek();
+
+                if (beforeNextPanel == nextPanelType || nextPanelType < 0)
+                    return;
+                switch (nextPanelType)
+                {
+                    case 0:
+                        ReplacePanel<ControlPanel>();
+                        break;
+                    case 1:
+                        ReplacePanel<LightPanel>();
+                        break;
+                    case 2:
+                        ReplacePanel<OtherSensorsPanel>();
+                        break;
+                    case 3:
+                        panel1.Controls.Clear();
+                        panel1.Controls.Add(new SettingsForm(this));
+                        break;
+                }
+                prevPanelsType.Push(beforeNextPanel);
+                nextPanelsType.Pop();
             }
-            prevPanelType = beforeNextPanel;
+            catch (InvalidOperationException) {}
         }
 
         private void panelNameLabel_Click(object sender, EventArgs e)

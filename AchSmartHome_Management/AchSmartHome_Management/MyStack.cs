@@ -22,13 +22,32 @@ using System.Collections.Generic;
 
 namespace AchSmartHome_Management
 {
+    /// <summary>
+    /// Мой класс стека, основанный на списке
+    /// Отличие от обычного Stack<T> в том,
+    /// что в моём классе есть функции как в JavaScript:
+    /// <code>Shift();</code> = удалить первый элемент стека.
+    /// <code>Unshift(T item);</code> = добавить элемент в начало стека.
+    /// </summary>
+    /// <typeparam name="T">Тип данных в стеке</typeparam>
     class MyStack<T> : List<T>
     {
+        /// <summary>
+        /// Мой класс стека, основанный на списке
+        /// Отличие от обычного Stack<T> в том,
+        /// что в моём классе есть функции как в JavaScript:
+        /// <code>Shift();</code> = удалить первый элемент стека.
+        /// <code>Unshift(T item);</code> = добавить элемент в начало стека.
+        /// </summary>
         public MyStack()
         {
             new List<T>();
         }
 
+        /// <summary>
+        /// Получить последний элемент стека
+        /// </summary>
+        /// <returns>Последний элемент стека</returns>
         public T Peek()
         {
             if (this.Count < 1)
@@ -42,12 +61,18 @@ namespace AchSmartHome_Management
             return lastItem;
         }
 
+        /// <summary>
+        /// Удалить последний элемент стека
+        /// </summary>
         public void Pop()
         {
             if (this.Count < 1)
                 throw new InvalidOperationException("There is no items in stack!");
             this.RemoveAt(this.Count - 1);
         }
+        /// <summary>
+        /// Удалить первый элемент стека
+        /// </summary>
         public void Shift()
         {
             if (this.Count < 1)
@@ -55,16 +80,26 @@ namespace AchSmartHome_Management
             this.RemoveAt(0);
         }
 
+        /// <summary>
+        /// Добавить элемент в конец стека (FIFO)
+        /// </summary>
+        /// <param name="item">Элемент для добавления</param>
         public void Push(T item)
         {
             this.Add(item);
         }
+        /// <summary>
+        /// Добавить элемент в начало стека
+        /// </summary>
+        /// <param name="item">Элемент для добавления</param>
         public void Unshift(T item)
         {
+            /*
             for (int i = (this.Count - 1); i > -1; i--)
             {
                 this.Insert(i + 1, this[i]);
             }
+            */
             this.Insert(0, item);
         }
     }

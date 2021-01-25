@@ -62,7 +62,7 @@ namespace AchSmartHome_Management
         public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
         {
             if (panel1.Controls.Count > 0)
-                prevPanelsType.Unshift(GetPanelType(panel1.Controls[0]));
+                prevPanelsType.Push(GetPanelType(panel1.Controls[0]));
             panel1.Controls.Clear();
             panel1.Controls.Add(new panelToAdd());
         }
@@ -147,8 +147,8 @@ namespace AchSmartHome_Management
                         panel1.Controls.Add(new SettingsForm(this));
                         break;
                 }
-                nextPanelsType.Push(beforeBackPanel);
                 prevPanelsType.Pop();
+                nextPanelsType.Push(beforeBackPanel);
             }
             catch (InvalidOperationException) {}
         }
@@ -178,8 +178,8 @@ namespace AchSmartHome_Management
                         panel1.Controls.Add(new SettingsForm(this));
                         break;
                 }
-                prevPanelsType.Push(beforeNextPanel);
                 nextPanelsType.Pop();
+                prevPanelsType.Push(beforeNextPanel);
             }
             catch (InvalidOperationException) {}
         }

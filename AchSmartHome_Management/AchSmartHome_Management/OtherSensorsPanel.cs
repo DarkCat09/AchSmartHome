@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Spire.Xls;
 
 namespace AchSmartHome_Management
 {
@@ -10,6 +11,7 @@ namespace AchSmartHome_Management
         {
             InitializeComponent();
             GlobalSettings.InitThemeAndLang(Controls, this);
+            toolTip1.SetToolTip(button2, Languages.GetLocalizedString("ExportToXls", "Export to Excel-spreadsheet"));
             GetSensorsValuesAndUpdate(DateTime.Now);
         }
         private void GetSensorsValuesAndUpdate(DateTime dt)
@@ -65,6 +67,11 @@ namespace AchSmartHome_Management
         private void button1_Click(object sender, EventArgs e)
         {
             GetSensorsValuesAndUpdate(dateTimePicker1.Value);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // TODO: Exporting to Excel values and LineDataChart using NuGet-package FreeSpire.XLS
         }
     }
 }

@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
@@ -56,15 +57,26 @@ namespace AchSmartHome_Management
             Controls.Add(panel1);
 
             GlobalSettings.InitThemeAndLang(Controls, this);
+            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
             ReplacePanel<ControlPanel>();
         }
 
         public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
         {
+            System.Text.StringBuilder logstring = new System.Text.StringBuilder("Changing panel ");
+
             if (panel1.Controls.Count > 0)
+            {
                 prevPanelsType.Push(GetPanelType(panel1.Controls[0]));
+                logstring.Append($"from {panel1.Controls[0]} ");
+            }
+
+            panelToAdd pta = new panelToAdd();
+            logstring.Append($"to {pta} ...");
+            Logging.LogEvent(0, logstring.ToString());
+
             panel1.Controls.Clear();
-            panel1.Controls.Add(new panelToAdd());
+            panel1.Controls.Add(pta);
         }
 
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
@@ -86,7 +98,6 @@ namespace AchSmartHome_Management
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Logging.DeleteLogFile();
             DatabaseConnecting.sqlDb.Close();
         }
 
@@ -122,7 +133,23 @@ namespace AchSmartHome_Management
             panel1.Controls.Add(new SettingsForm(this));
         }
 
-        private void goBackLabel_Click(object sender, EventArgs e)
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReplacePanel<AboutProgram>();
+        }
+
+        private void копироватьЛогфайлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+                File.Copy($"{Path.GetTempPath()}achsmarthome_mgmt.log", saveFileDialog1.FileName);
+        }
+
+        /// <summary>
+        /// Go to the previous page
+        /// Перейти на предыдущую страницу
+        /// </summary>
+        /// <param name="form">Компонент, вызывающий функцию</param>
+        public static void GoBackPage(Control form)
         {
             try
             {
@@ -144,16 +171,20 @@ namespace AchSmartHome_Management
                         break;
                     case 3:
                         panel1.Controls.Clear();
-                        panel1.Controls.Add(new SettingsForm(this));
+                        panel1.Controls.Add(new SettingsForm((Form)form));
                         break;
                 }
                 prevPanelsType.Pop();
                 nextPanelsType.Push(beforeBackPanel);
             }
-            catch (InvalidOperationException) {}
+            catch (InvalidOperationException) { }
         }
-
-        private void goNextLabel_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Go to the next page
+        /// Перейти на следующую страницу
+        /// </summary>
+        /// <param name="form">Компонент, вызывающий функцию</param>
+        public void GoNextPage(Control form)
         {
             try
             {
@@ -175,13 +206,23 @@ namespace AchSmartHome_Management
                         break;
                     case 3:
                         panel1.Controls.Clear();
-                        panel1.Controls.Add(new SettingsForm(this));
+                        panel1.Controls.Add(new SettingsForm((Form)form));
                         break;
                 }
                 nextPanelsType.Pop();
                 prevPanelsType.Push(beforeNextPanel);
             }
-            catch (InvalidOperationException) {}
+            catch (InvalidOperationException) { }
+        }
+
+        private void goBackLabel_Click(object sender, EventArgs e)
+        {
+            GoBackPage(this);
+        }
+
+        private void goNextLabel_Click(object sender, EventArgs e)
+        {
+            GoNextPage(this);
         }
 
         private void panelNameLabel_Click(object sender, EventArgs e)

@@ -31,32 +31,23 @@ namespace AchSmartHome_Management
                         strLevel = "I";
                         break;
                 }
-                
-                string preparedMessage = message.Replace("\n", "\n\t\t\t\t");
-                /*
-                if (preparedMessage.EndsWith("\n"))
-                    preparedMessage.Remove(preparedMessage.Length - 2, preparedMessage.Length - 1);
-                */
-                preparedMessage =
-                    DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff ") + strLevel +
-                    ":\t" + preparedMessage + "\n";
 
-                File.AppendAllText(Path.GetTempPath().ToString() + "achsmarthome_mgmt.log", preparedMessage);
+                string preparedMessage = message.Replace("\n", "\n\t\t\t\t");
+                preparedMessage = $"{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff} {strLevel}:\t{preparedMessage}\n";
+
+                File.AppendAllText($"{Path.GetTempPath()}achsmarthome_mgmt.log", preparedMessage);
             }
-            catch (Exception)
-            {
-                // do nothing
-            }
+            catch (Exception) {}
         }
         public static void DeleteLogFile()
         {
             try
             {
-                File.Delete(Path.GetTempPath().ToString() + "achsmarthome_mgmt.log");
+                File.Delete($"{Path.GetTempPath()}achsmarthome_mgmt.log");
             }
             catch (Exception ex)
             {
-                LogEvent(3, "Can\'t delete temporary log-file!\n" + ex.ToString());
+                LogEvent(3, $"Can\'t delete temporary log-file!\n{ex}");
             }
         }
     }

@@ -41,11 +41,13 @@
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПроектеASHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.VSeparator2 = new System.Windows.Forms.Label();
+            this.VSeparator1 = new System.Windows.Forms.Label();
             this.panelNameLabel = new System.Windows.Forms.Label();
             this.goNextLabel = new System.Windows.Forms.Label();
             this.goBackLabel = new System.Windows.Forms.Label();
-            this.VSeparator1 = new System.Windows.Forms.Label();
-            this.VSeparator2 = new System.Windows.Forms.Label();
+            this.копироватьЛогфайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -68,6 +70,7 @@
             this.соединитьсяToolStripMenuItem,
             this.регистрацияToolStripMenuItem,
             this.управлениеToolStripMenuItem,
+            this.копироватьЛогфайлToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.панельToolStripMenuItem.Name = "панельToolStripMenuItem";
             this.панельToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
@@ -77,7 +80,7 @@
             // соединитьсяToolStripMenuItem
             // 
             this.соединитьсяToolStripMenuItem.Name = "соединитьсяToolStripMenuItem";
-            this.соединитьсяToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.соединитьсяToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.соединитьсяToolStripMenuItem.Tag = "Connect";
             this.соединитьсяToolStripMenuItem.Text = "Подключиться";
             this.соединитьсяToolStripMenuItem.Click += new System.EventHandler(this.соединитьсяToolStripMenuItem_Click);
@@ -85,7 +88,7 @@
             // регистрацияToolStripMenuItem
             // 
             this.регистрацияToolStripMenuItem.Name = "регистрацияToolStripMenuItem";
-            this.регистрацияToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.регистрацияToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.регистрацияToolStripMenuItem.Text = "Регистрация";
             this.регистрацияToolStripMenuItem.Click += new System.EventHandler(this.регистрацияToolStripMenuItem_Click);
             // 
@@ -96,7 +99,7 @@
             this.светToolStripMenuItem,
             this.настройкиToolStripMenuItem});
             this.управлениеToolStripMenuItem.Name = "управлениеToolStripMenuItem";
-            this.управлениеToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.управлениеToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.управлениеToolStripMenuItem.Tag = "Management";
             this.управлениеToolStripMenuItem.Text = "Управление";
             // 
@@ -127,7 +130,7 @@
             // выходToolStripMenuItem
             // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.выходToolStripMenuItem.Tag = "Exit";
             this.выходToolStripMenuItem.Text = "Выход";
             this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
@@ -145,14 +148,15 @@
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.оПрограммеToolStripMenuItem.Tag = "AboutProg";
             this.оПрограммеToolStripMenuItem.Text = "О программе";
+            this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
             // 
             // оПроектеASHToolStripMenuItem
             // 
             this.оПроектеASHToolStripMenuItem.Name = "оПроектеASHToolStripMenuItem";
-            this.оПроектеASHToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.оПроектеASHToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.оПроектеASHToolStripMenuItem.Tag = "AboutProj";
             this.оПроектеASHToolStripMenuItem.Text = "О проекте ASH";
             // 
@@ -168,6 +172,30 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(381, 29);
             this.panel3.TabIndex = 2;
+            // 
+            // VSeparator2
+            // 
+            this.VSeparator2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.VSeparator2.Font = new System.Drawing.Font("Lucida Sans Unicode", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.VSeparator2.ForeColor = System.Drawing.Color.Silver;
+            this.VSeparator2.Location = new System.Drawing.Point(331, 0);
+            this.VSeparator2.Name = "VSeparator2";
+            this.VSeparator2.Size = new System.Drawing.Size(18, 29);
+            this.VSeparator2.TabIndex = 4;
+            this.VSeparator2.Text = "|";
+            this.VSeparator2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // VSeparator1
+            // 
+            this.VSeparator1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.VSeparator1.Font = new System.Drawing.Font("Lucida Sans Unicode", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.VSeparator1.ForeColor = System.Drawing.Color.Silver;
+            this.VSeparator1.Location = new System.Drawing.Point(32, 0);
+            this.VSeparator1.Name = "VSeparator1";
+            this.VSeparator1.Size = new System.Drawing.Size(18, 29);
+            this.VSeparator1.TabIndex = 3;
+            this.VSeparator1.Text = "|";
+            this.VSeparator1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelNameLabel
             // 
@@ -207,29 +235,17 @@
             this.goBackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.goBackLabel.Click += new System.EventHandler(this.goBackLabel_Click);
             // 
-            // VSeparator1
+            // копироватьЛогфайлToolStripMenuItem
             // 
-            this.VSeparator1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.VSeparator1.Font = new System.Drawing.Font("Lucida Sans Unicode", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.VSeparator1.ForeColor = System.Drawing.Color.Silver;
-            this.VSeparator1.Location = new System.Drawing.Point(32, 0);
-            this.VSeparator1.Name = "VSeparator1";
-            this.VSeparator1.Size = new System.Drawing.Size(18, 29);
-            this.VSeparator1.TabIndex = 3;
-            this.VSeparator1.Text = "|";
-            this.VSeparator1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.копироватьЛогфайлToolStripMenuItem.Name = "копироватьЛогфайлToolStripMenuItem";
+            this.копироватьЛогфайлToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.копироватьЛогфайлToolStripMenuItem.Text = "Копировать лог-файл";
+            this.копироватьЛогфайлToolStripMenuItem.Click += new System.EventHandler(this.копироватьЛогфайлToolStripMenuItem_Click);
             // 
-            // VSeparator2
+            // saveFileDialog1
             // 
-            this.VSeparator2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.VSeparator2.Font = new System.Drawing.Font("Lucida Sans Unicode", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.VSeparator2.ForeColor = System.Drawing.Color.Silver;
-            this.VSeparator2.Location = new System.Drawing.Point(331, 0);
-            this.VSeparator2.Name = "VSeparator2";
-            this.VSeparator2.Size = new System.Drawing.Size(18, 29);
-            this.VSeparator2.TabIndex = 4;
-            this.VSeparator2.Text = "|";
-            this.VSeparator2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.saveFileDialog1.DefaultExt = "log";
+            this.saveFileDialog1.FileName = "achsmarthome.log";
             // 
             // Form1
             // 
@@ -272,6 +288,8 @@
         private System.Windows.Forms.Label panelNameLabel;
         private System.Windows.Forms.Label VSeparator2;
         private System.Windows.Forms.Label VSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem копироватьЛогфайлToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

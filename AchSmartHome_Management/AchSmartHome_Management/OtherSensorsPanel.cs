@@ -71,7 +71,13 @@ namespace AchSmartHome_Management
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // TODO: Exporting to Excel values and LineDataChart using NuGet-package FreeSpire.XLS
+            /*
+            Workbook wbStream = new Workbook();
+            Worksheet sheet = wbStream.Worksheets[0];
+            sheet.Range["A1"].Text = "Date";
+            sheet.Range["B1"].Text = "Name";
+            sheet.Range["C1"].Text = "Value";
+            */
         }
     }
 }

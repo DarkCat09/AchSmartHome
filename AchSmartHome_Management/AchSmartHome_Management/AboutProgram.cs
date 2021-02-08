@@ -13,7 +13,7 @@ namespace AchSmartHome_Management
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Form1.GoBackPage(this);
+            MainForm.GoBackPage(this);
         }
 
         private void button1_Click(object sender, EventArgs e)

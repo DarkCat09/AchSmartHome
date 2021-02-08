@@ -107,7 +107,7 @@ namespace AchSmartHome_Management
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Form1.ReplacePanel<LightPanel>();
+            MainForm.ReplacePanel<LightPanel>();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -117,7 +117,7 @@ namespace AchSmartHome_Management
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1.ReplacePanel<OtherSensorsPanel>();
+            MainForm.ReplacePanel<OtherSensorsPanel>();
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)

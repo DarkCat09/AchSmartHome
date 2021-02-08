@@ -19,8 +19,8 @@ namespace AchSmartHome_Management
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1.regusername = textBox1.Text;
-            Form1.regpasshash = BCrypt.Net.BCrypt.HashPassword(textBox2.Text);
+            MainForm.regusername = textBox1.Text;
+            MainForm.regpasshash = BCrypt.Net.BCrypt.HashPassword(textBox2.Text);
             Close();
         }
     }

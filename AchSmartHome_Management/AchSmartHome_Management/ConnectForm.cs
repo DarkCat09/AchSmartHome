@@ -57,9 +57,9 @@ namespace AchSmartHome_Management
                 {
                     if (BCrypt.Net.BCrypt.Verify(textBox3.Text, sqlReqResult[2].ToString()))
                     {
-                        Form1.userid = Convert.ToInt32(sqlReqResult[0]);
-                        Form1.username = sqlReqResult[1].ToString();
-                        Form1.userprivs = Convert.ToInt32(sqlReqResult[3]);
+                        MainForm.userid = Convert.ToInt32(sqlReqResult[0]);
+                        MainForm.username = sqlReqResult[1].ToString();
+                        MainForm.userprivs = Convert.ToInt32(sqlReqResult[3]);
                     }
                     else
                     {

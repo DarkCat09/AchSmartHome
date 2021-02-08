@@ -33,9 +33,12 @@ namespace AchSmartHome_Management
         public static MySqlConnection sqlDb = null;
         public static void ReadDefaultDbParams()
         {
+            Logging.LogEvent(0, "Receiving DataBase-parameters from database.conf ...");
             try
             {
+                Logging.LogEvent(1, "Reading database.conf ...");
                 string[] dbParamsFromFile = File.ReadAllLines("database.conf");
+                Logging.LogEvent(1, "Retreiving DB-parameters ...");
                 if (dbParamsFromFile.Length > 1)
                 {
                     dbaddr = dbParamsFromFile[0].Split(new char[] { ';' })[0];
@@ -140,7 +143,7 @@ namespace AchSmartHome_Management
                         }
                     }
                     Logging.LogEvent(
-                        0, "Executing DDR SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                        0, "Executing DRR SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
                     );
                     sqlCommand.ExecuteNonQuery();
                 }

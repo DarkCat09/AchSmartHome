@@ -95,7 +95,7 @@ namespace AchSmartHome_Management
             }
 
             if (replacePanelToHome)
-                Form1.ReplacePanel<ControlPanel>();
+                MainForm.ReplacePanel<ControlPanel>();
         }
 
         private void button1_Click(object sender, EventArgs e)

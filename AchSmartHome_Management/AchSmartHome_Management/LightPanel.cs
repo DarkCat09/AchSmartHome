@@ -34,7 +34,7 @@ namespace AchSmartHome_Management
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Form1.ReplacePanel<ControlPanel>();
+            MainForm.ReplacePanel<ControlPanel>();
         }
 
         private void ChangeLightState(int _lampnum)

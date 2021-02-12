@@ -28,9 +28,9 @@ namespace AchSmartHome_Management
 {
     public partial class MainForm : Form
     {
-        private string[] importantFiles = new string[3]
+        private string[] importantFiles = new string[2]
         {
-            "langs", "langs.conf", "database.conf"
+            "langs.conf", "database.conf"
         };
 
         public static string regusername = "", regpasshash = "";
@@ -52,12 +52,6 @@ namespace AchSmartHome_Management
             panel1.ControlAdded += new ControlEventHandler(PanelChanged);
             Controls.Add(panel1);
 
-            GlobalSettings.InitThemeAndLang(Controls, this);
-            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
             #region Checking configuration files
             foreach (string impfile in importantFiles)
             {
@@ -83,6 +77,9 @@ namespace AchSmartHome_Management
             #endregion
 
             ReplacePanel<ControlPanel>();
+
+            GlobalSettings.InitThemeAndLang(Controls, this);
+            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
         }
 
         private void ExtractFiles()

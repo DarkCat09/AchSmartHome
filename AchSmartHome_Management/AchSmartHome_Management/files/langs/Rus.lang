@@ -39,3 +39,7 @@ PanelName3=Панель настроек
 PanelName4=Панель "О программе"
 PanelName5=Неопределённая панель!
 InsufPrivs=Недостаточно привилегий!
+SettingsWarningLine1=Для полного изменения темы и языка
+SettingsWarningLine2=нажмите в этом сообщении OK, затем
+SettingsWarningLine3=приложение автоматически перезапустится.
+ChangingSettingsHeading=Изменение настроек

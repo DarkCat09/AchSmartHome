@@ -137,6 +137,12 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WirelessDoorbell.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WirelessDoorbell.Designer.cs">
+      <DependentUpon>WirelessDoorbell.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AboutProgram.resx">
       <DependentUpon>AboutProgram.cs</DependentUpon>
     </EmbeddedResource>
@@ -173,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WirelessDoorbell.resx">
+      <DependentUpon>WirelessDoorbell.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="bin\Debug\langs\Std.lang" />
     <None Include="files\files.zip" />
@@ -211,6 +220,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="files\7za.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pictures\door.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

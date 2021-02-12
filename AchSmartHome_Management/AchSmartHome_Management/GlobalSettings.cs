@@ -17,23 +17,23 @@
  * along with AchSmartHome.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace AchSmartHome_Management
 {
     class GlobalSettings
     {
-        public static System.Drawing.Color theme = Properties.Settings.Default.theme;
-        public static System.Drawing.Color fontcol = Properties.Settings.Default.font_color;
+        public static Color theme = Properties.Settings.Default.theme;
+        public static Color fontcol = Properties.Settings.Default.font_color;
         public static bool minimizeToTray = Properties.Settings.Default.min_to_tray;
         public static bool dontWorkInBackground = Properties.Settings.Default.dont_work_in_bg;
         public static bool autoUpdateSensorsVals = Properties.Settings.Default.auto_upd_values;
 
         public static void ChangeSettings(
             string _language,
-            System.Drawing.Color _theme,
-            System.Drawing.Color _fontcol,
+            Color _theme,
+            Color _fontcol,
             bool _minToTray,
             bool _dontWorkInBg,
             bool _autoUpdSensorsVals
@@ -60,27 +60,26 @@ namespace AchSmartHome_Management
         public static void InitThemeAndLang(Control.ControlCollection ctrls, Control f)
         {
             System.Collections.Generic.Dictionary<string, string> langFiles = Languages.InitLangs();
-            _ = Languages.LoadLang(langFiles[Languages.curlang], langFiles);
-            //int errcode = Languages.LoadLang(langFiles[Languages.curlang], langFiles);
-            //_ = MessageBox.Show(errcode.ToString());
+            int errcode = Languages.LoadLang(langFiles[Languages.curlang], langFiles);
+            Logging.LogEvent(3, $"Error happened while loading languages! LoadLang() exit code = {errcode}.");
 
             f.BackColor = theme;
             foreach (Control ctrl in ctrls)
             {
-                if (!(ctrl is Button) && !(ctrl is ComboBox) && !(ctrl is MenuStrip) && !(ctrl is TableLayoutPanel) && !(ctrl is Panel) && !(ctrl is DataGridView))
-                    ctrl.ForeColor = GlobalSettings.fontcol;
+                if (DoesThisElemColorChanging(ctrl))
+                    ctrl.ForeColor = fontcol;
                 if (ctrl is LinkLabel)
-                    ((LinkLabel)ctrl).LinkColor = GlobalSettings.fontcol;
+                    ((LinkLabel)ctrl).LinkColor = fontcol;
 
                 //for Panel
                 if (ctrl is Panel)
                 {
                     foreach (Control panelctrl in ((Panel)ctrl).Controls)
                     {
-                        if (!(panelctrl is Button) && !(panelctrl is ComboBox) && !(panelctrl is MenuStrip) && !(panelctrl is TableLayoutPanel))
-                            panelctrl.ForeColor = GlobalSettings.fontcol;
+                        if (DoesThisElemColorChanging(panelctrl))
+                            panelctrl.ForeColor = fontcol;
                         if (panelctrl is LinkLabel)
-                            ((LinkLabel)panelctrl).LinkColor = GlobalSettings.fontcol;
+                            ((LinkLabel)panelctrl).LinkColor = fontcol;
 
                         if (panelctrl.Tag != null)
                         {
@@ -102,10 +101,10 @@ namespace AchSmartHome_Management
                         {
                             foreach (Control panelctrl in ((Panel)tablectrl).Controls)
                             {
-                                if (!(panelctrl is Button) && !(panelctrl is ComboBox) && !(panelctrl is MenuStrip) && !(panelctrl is TableLayoutPanel))
-                                    panelctrl.ForeColor = GlobalSettings.fontcol;
+                                if (DoesThisElemColorChanging(panelctrl))
+                                    panelctrl.ForeColor = fontcol;
                                 if (panelctrl is LinkLabel)
-                                    ((LinkLabel)panelctrl).LinkColor = GlobalSettings.fontcol;
+                                    ((LinkLabel)panelctrl).LinkColor = fontcol;
 
                                 if (panelctrl.Tag != null)
                                 {
@@ -117,10 +116,10 @@ namespace AchSmartHome_Management
                             }
                         }
 
-                        if (!(tablectrl is Button) && !(tablectrl is ComboBox) && !(tablectrl is MenuStrip) && !(tablectrl is TableLayoutPanel))
-                            tablectrl.ForeColor = GlobalSettings.fontcol;
+                        if (DoesThisElemColorChanging(tablectrl))
+                            tablectrl.ForeColor = fontcol;
                         if (tablectrl is LinkLabel)
-                            ((LinkLabel)tablectrl).LinkColor = GlobalSettings.fontcol;
+                            ((LinkLabel)tablectrl).LinkColor = fontcol;
 
                         if (tablectrl.Tag != null)
                         {
@@ -140,6 +139,47 @@ namespace AchSmartHome_Management
                     }
                 }
             }
+        }
+
+        private static bool DoesThisElemColorChanging(Control ctrlToCheck)
+        {
+            return (
+                !(ctrlToCheck is Button) &&
+                !(ctrlToCheck is ComboBox) &&
+                !(ctrlToCheck is MenuStrip) &&
+                !(ctrlToCheck is TableLayoutPanel) &&
+                !(ctrlToCheck is Panel) &&
+                !(ctrlToCheck is DataGridView) &&
+                !(ctrlToCheck is TextBox)
+            );
+        }
+
+        public static Color ThemeStringToColor(object value)
+        {
+            return
+                (value != null) ? (
+                (value.ToString() == "Light")  ? Color.FromName("Control")     :
+                (value.ToString() == "Dark")   ? Color.FromArgb(64, 64, 64)    :
+                (value.ToString() == "Green")  ? Color.FromName("SeaGreen")    :
+                (value.ToString() == "Cyan")   ? Color.FromName("DarkCyan")    :
+                (value.ToString() == "Pink")   ? Color.FromName("Pink")        :
+                (value.ToString() == "Orange") ? Color.FromName("DarkOrange")  :
+                (value.ToString() == "Maroon") ? Color.FromName("Maroon")      :
+                Color.FromName("Control")) : theme;
+        }
+        public static string ColorToThemeName(Color value)
+        {
+            string colorStr = (value != null) ? value.ToString() : "Control";
+            return (
+                (colorStr == "Control")     ? "Light"   :
+                (value.R == 64 && value.G == 64 && value.B == 64) ? "Dark" :
+                (colorStr == "SeaGreen")    ? "Green"   :
+                (colorStr == "DarkCyan")    ? "Cyan"    :
+                (colorStr == "Pink")        ? "Pink"    :
+                (colorStr == "DarkOrange")  ? "Orange"  :
+                (colorStr == "Maroon")      ? "Maroon"  :
+                "Light"
+            );
         }
     }
 }

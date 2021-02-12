@@ -42,9 +42,9 @@
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПроектеASHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.panelNameLabel = new System.Windows.Forms.Label();
             this.VSeparator2 = new System.Windows.Forms.Label();
             this.VSeparator1 = new System.Windows.Forms.Label();
-            this.panelNameLabel = new System.Windows.Forms.Label();
             this.goNextLabel = new System.Windows.Forms.Label();
             this.goBackLabel = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -106,7 +106,7 @@
             // главнаяСтраницаToolStripMenuItem
             // 
             this.главнаяСтраницаToolStripMenuItem.Name = "главнаяСтраницаToolStripMenuItem";
-            this.главнаяСтраницаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.главнаяСтраницаToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.главнаяСтраницаToolStripMenuItem.Tag = "Homepage";
             this.главнаяСтраницаToolStripMenuItem.Text = "Главная страница";
             this.главнаяСтраницаToolStripMenuItem.Click += new System.EventHandler(this.главнаяСтраницаToolStripMenuItem_Click);
@@ -114,7 +114,7 @@
             // светToolStripMenuItem
             // 
             this.светToolStripMenuItem.Name = "светToolStripMenuItem";
-            this.светToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.светToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.светToolStripMenuItem.Tag = "Light";
             this.светToolStripMenuItem.Text = "Свет";
             this.светToolStripMenuItem.Click += new System.EventHandler(this.светToolStripMenuItem_Click);
@@ -122,7 +122,7 @@
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.настройкиToolStripMenuItem.Tag = "Settings";
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
@@ -180,6 +180,18 @@
             this.panel3.Size = new System.Drawing.Size(381, 29);
             this.panel3.TabIndex = 2;
             // 
+            // panelNameLabel
+            // 
+            this.panelNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelNameLabel.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.panelNameLabel.Location = new System.Drawing.Point(50, 0);
+            this.panelNameLabel.Name = "panelNameLabel";
+            this.panelNameLabel.Size = new System.Drawing.Size(281, 29);
+            this.panelNameLabel.TabIndex = 2;
+            this.panelNameLabel.Text = "Главная панель";
+            this.panelNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panelNameLabel.Click += new System.EventHandler(this.panelNameLabel_Click);
+            // 
             // VSeparator2
             // 
             this.VSeparator2.Dock = System.Windows.Forms.DockStyle.Right;
@@ -203,18 +215,6 @@
             this.VSeparator1.TabIndex = 3;
             this.VSeparator1.Text = "|";
             this.VSeparator1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panelNameLabel
-            // 
-            this.panelNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelNameLabel.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.panelNameLabel.Location = new System.Drawing.Point(50, 0);
-            this.panelNameLabel.Name = "panelNameLabel";
-            this.panelNameLabel.Size = new System.Drawing.Size(281, 29);
-            this.panelNameLabel.TabIndex = 2;
-            this.panelNameLabel.Text = "Главная панель";
-            this.panelNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.panelNameLabel.Click += new System.EventHandler(this.panelNameLabel_Click);
             // 
             // goNextLabel
             // 
@@ -260,7 +260,6 @@
             this.Tag = "FormTitle";
             this.Text = "Управление умным домом AchSmartHome";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel3.ResumeLayout(false);

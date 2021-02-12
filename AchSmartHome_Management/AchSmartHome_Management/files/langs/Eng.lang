@@ -39,3 +39,7 @@ PanelName3=Settings Panel
 PanelName4=About Program Panel
 PanelName5=Undefined Panel!
 InsufPrivs=Insufficient Privileges!
+SettingsWarningLine1=To completely change the theme and language
+SettingsWarningLine2=click in this message OK, then
+SettingsWarningLine3=the application will be restarted automatically.
+ChangingSettingsHeading=Changing Settings

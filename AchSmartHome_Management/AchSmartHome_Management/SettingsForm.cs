@@ -40,7 +40,7 @@ namespace AchSmartHome_Management
             }
 
             comboBox1.SelectedItem = Languages.curlang;
-            //comboBox2.SelectedItem = GlobalSettings.theme;
+            comboBox2.SelectedItem = GlobalSettings.ColorToThemeName(GlobalSettings.theme);
             checkBox1.Checked = GlobalSettings.minimizeToTray;
             checkBox2.Checked = GlobalSettings.dontWorkInBackground;
             checkBox3.Checked = GlobalSettings.autoUpdateSensorsVals;
@@ -54,15 +54,7 @@ namespace AchSmartHome_Management
 
                 (comboBox1.SelectedItem != null) ? comboBox1.Text.ToString() : Languages.curlang,
 
-                (comboBox2.SelectedItem != null) ? (
-                (comboBox2.SelectedItem.ToString() == "Light") ? Color.FromName("Control")      :
-                (comboBox2.SelectedItem.ToString() == "Dark") ? Color.FromArgb(64, 64, 64)      :
-                (comboBox2.SelectedItem.ToString() == "Green") ? Color.FromName("SeaGreen")     :
-                (comboBox2.SelectedItem.ToString() == "Cyan") ? Color.FromName("DarkCyan")      :
-                (comboBox2.SelectedItem.ToString() == "Pink") ? Color.FromName("Pink")          :
-                (comboBox2.SelectedItem.ToString() == "Orange") ? Color.FromName("DarkOrange")  :
-                (comboBox2.SelectedItem.ToString() == "Maroon") ? Color.FromName("Maroon")      :
-                Color.FromName("Control")) : GlobalSettings.theme,
+                GlobalSettings.ThemeStringToColor(comboBox2.SelectedItem),
 
                 (comboBox2.SelectedItem != null) ? (
                 (comboBox2.SelectedItem.ToString() == "Light")  ? Color.FromName("ControlText")     :
@@ -79,15 +71,19 @@ namespace AchSmartHome_Management
 
             if (startForm == null)
             {
-                MessageBox.Show(
-                    (Languages.curlang == "RU") ?
-                    "Для полного изменения темы и языка\n" +
-                    "нажмите в этом сообщении OK и\nперезапустите приложение." :
-                    "To completely change the theme and language\n" +
-                    "click in this message OK and\nrestart the application.",
-                    (Languages.curlang == "RU") ? "Изменение настроек" : "Changing settings",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning
+                DialogResult settingsWarningResult = MessageBox.Show(
+                    Languages.GetLocalizedString(
+                        "SettingsWarningLine1", "To completely change the theme and language"
+                    ) + "\n" +
+                    Languages.GetLocalizedString("SettingsWarningLine2", "click in this message OK, then") + "\n" +
+                    Languages.GetLocalizedString(
+                        "SeetingsWarningLine3", "the application will be restarted automatically"
+                    ),
+                    Languages.GetLocalizedString("ChangingSettingsHeading", "Changing Settings"),
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning
                 );
+                if (settingsWarningResult == DialogResult.OK)
+                    Application.Restart();
             }
             else
             {
@@ -95,7 +91,7 @@ namespace AchSmartHome_Management
             }
 
             if (replacePanelToHome)
-                MainForm.ReplacePanel<ControlPanel>();
+                MainForm.GoBackPage(this);
         }
 
         private void button1_Click(object sender, EventArgs e)

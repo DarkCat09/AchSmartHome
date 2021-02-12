@@ -17,7 +17,6 @@
  * along with AchSmartHome.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.IO;
 using System.Collections.Generic;
 
@@ -85,10 +84,10 @@ namespace AchSmartHome_Management
             {
                 return 3;
             }
-            /*catch (Exception)
+            catch (System.Exception)
             {
                 return -1;
-            }*/
+            }
 
             return 0;
         }

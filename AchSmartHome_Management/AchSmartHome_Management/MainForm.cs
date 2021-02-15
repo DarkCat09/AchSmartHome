@@ -45,6 +45,9 @@ namespace AchSmartHome_Management
         {
             InitializeComponent();
 
+            GlobalSettings.InitThemeAndLang(Controls, this);
+            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
+
             panel1 = new Panel();
             panel1.Name = "panel1";
             panel1.Location = new System.Drawing.Point(12, 51);
@@ -77,9 +80,6 @@ namespace AchSmartHome_Management
             #endregion
 
             ReplacePanel<ControlPanel>();
-
-            GlobalSettings.InitThemeAndLang(Controls, this);
-            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
         }
 
         private void ExtractFiles()
@@ -267,11 +267,14 @@ namespace AchSmartHome_Management
                     case 4:
                         ReplacePanel<AboutProgram>();
                         break;
+                    case 5:
+                        ReplacePanel<WirelessDoorbell>();
+                        break;
                 }
                 prevPanelsType.Pop();
                 nextPanelsType.Push(beforeBackPanel);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException) {}
         }
         /// <summary>
         /// Go to the next page
@@ -305,11 +308,14 @@ namespace AchSmartHome_Management
                     case 4:
                         ReplacePanel<AboutProgram>();
                         break;
+                    case 5:
+                        ReplacePanel<WirelessDoorbell>();
+                        break;
                 }
                 nextPanelsType.Pop();
                 prevPanelsType.Push(beforeNextPanel);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException) {}
         }
 
         private void goBackLabel_Click(object sender, EventArgs e)
@@ -351,8 +357,11 @@ namespace AchSmartHome_Management
             else if (ctrl is AboutProgram)
                 return 4;
 
-            else
+            else if (ctrl is WirelessDoorbell)
                 return 5;
+
+            else
+                return 6;
         }
     }
 }

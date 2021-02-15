@@ -15,6 +15,7 @@ namespace AchSmartHome_Management
         public WirelessDoorbell()
         {
             InitializeComponent();
+            GlobalSettings.InitThemeAndLang(Controls, this);
         }
     }
 }

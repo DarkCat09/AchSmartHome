@@ -125,5 +125,10 @@ namespace AchSmartHome_Management
             if (GlobalSettings.autoUpdateSensorsVals)
                 GetSensorsValuesAndUpdate(dateTimePicker1.Value);
         }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MainForm.ReplacePanel<WirelessDoorbell>();
+        }
     }
 }

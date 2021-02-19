@@ -60,7 +60,7 @@ namespace AchSmartHome_Management
                     MainForm.ReplacePanel<AboutProgram>();
                     break;
                 default:
-                    Logging.LogEvent(2, "Invalid selected index in ChoosePanel!");
+                    Logging.LogEvent(2, "ChoosePanel", "Invalid selected index!");
                     break;
             }
             Close();

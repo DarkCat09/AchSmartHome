@@ -11,12 +11,15 @@ namespace AchSmartHome_Management
         {
             InitializeComponent();
             GlobalSettings.InitThemeAndLang(Controls, this);
+            Column1.HeaderText = Languages.GetLocalizedString("DateText", "Date");
+            Column2.HeaderText = Languages.GetLocalizedString("Name", "Sensor Name");
+            Column3.HeaderText = Languages.GetLocalizedString("Value", "Value");
             toolTip1.SetToolTip(button2, Languages.GetLocalizedString("ExportToXls", "Export to Excel-spreadsheet"));
             GetSensorsValuesAndUpdate(DateTime.Now);
         }
         private void GetSensorsValuesAndUpdate(DateTime dt)
         {
-            Logging.LogEvent(0, "Updating custom sensors values... DT = " + dt.ToString("dd.MM.yyyy,HH:mm"));
+            Logging.LogEvent(0, "OtherSensors", "Updating custom sensors values... DT = " + dt.ToString("dd.MM.yyyy,HH:mm"));
             try
             {
                 List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
@@ -53,7 +56,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "Error happened while updating custom sensors values!\n" + ex.ToString());
+                Logging.LogEvent(3, "OtherSensors", "Error happened while updating custom sensors values!\n" + ex.ToString());
                 MessageBox.Show("Произошла ошибка!\n" + ex.Message);
             }
         }

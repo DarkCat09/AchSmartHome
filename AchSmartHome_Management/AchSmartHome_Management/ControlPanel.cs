@@ -52,7 +52,7 @@ namespace AchSmartHome_Management
 
         private void GetSensorsValuesAndUpdate(DateTime dt)
         {
-            Logging.LogEvent(0, "Updating main sensors values... DT = " + dt.ToString("dd.MM.yyyy,HH:mm"));
+            Logging.LogEvent(0, "ControlPanelUpdater", "Updating main sensors values... DT = " + dt.ToString("dd.MM.yyyy,HH:mm"));
             try
             {
                 label1.Text     = sensorsText[0];
@@ -100,7 +100,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "Error happened while updating main sensors values!\n" + ex.ToString());
+                Logging.LogEvent(3, "ControlPanelUpdater", "Error happened while updating main sensors values!\n" + ex.ToString());
                 _ = MessageBox.Show("Произошла ошибка!\n" + ex.Message);
             }
         }

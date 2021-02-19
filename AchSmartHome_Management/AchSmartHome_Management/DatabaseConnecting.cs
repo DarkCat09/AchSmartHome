@@ -33,12 +33,12 @@ namespace AchSmartHome_Management
         public static MySqlConnection sqlDb = null;
         public static void ReadDefaultDbParams()
         {
-            Logging.LogEvent(0, "Receiving DataBase-parameters from database.conf ...");
+            Logging.LogEvent(0, "SQLConnectOptions", "Receiving DataBase-parameters from database.conf ...");
             try
             {
-                Logging.LogEvent(1, "Reading database.conf ...");
+                Logging.LogEvent(1, "SQLConnectOptions", "Reading database.conf ...");
                 string[] dbParamsFromFile = File.ReadAllLines("database.conf");
-                Logging.LogEvent(1, "Retreiving DB-parameters ...");
+                Logging.LogEvent(1, "SQLConnectOptions", "Retreiving DB-parameters ...");
                 if (dbParamsFromFile.Length > 1)
                 {
                     dbaddr = dbParamsFromFile[0].Split(new char[] { ';' })[0];
@@ -50,7 +50,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "Can\'t read database params!\n" + ex.ToString());
+                Logging.LogEvent(3, "SQLConnectOptions", "Can\'t read database params!\n" + ex.ToString());
                 _ = MessageBox.Show("Error happened while reading database parameters!");
             }
         }
@@ -68,7 +68,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(4, "Can\'t connect to server! Exiting!\n" + ex.ToString());
+                Logging.LogEvent(4, "SQLConnect", "Can\'t connect to server! Exiting!\n" + ex.ToString());
                 return false;
             }
         }
@@ -93,14 +93,15 @@ namespace AchSmartHome_Management
                     }
                 }
                 Logging.LogEvent(
-                    0, "Executing SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                    0, "SQLExecuter", "Executing SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
                 );
                 DbDataReader dbdr = sqlCommand.ExecuteReader();
                 int read_index = 0;
                 while (dbdr.Read())
                 {
                     Logging.LogEvent(
-                        1, "DataRead Iteration #" + read_index.ToString() +
+                        1, "SQLExecuter",
+                        "DataRead Iteration #" + read_index.ToString() +
                         ", FieldCount: " + dbdr.FieldCount
                     );
                     for (int i = 0; i < dbdr.FieldCount; i++)
@@ -113,7 +114,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "Error happened while executing SQL-request:\n" + ex.ToString());
+                Logging.LogEvent(3, "SQLExecuter", "Error happened while executing SQL-request:\n" + ex.ToString());
             }
             return sqlReqResult;
         }
@@ -143,13 +144,13 @@ namespace AchSmartHome_Management
                         }
                     }
                     Logging.LogEvent(
-                        0, "Executing DRR SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                        0, "SQLExecuter", "Executing DRR SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
                     );
                     sqlCommand.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
-                    Logging.LogEvent(3, "Error happened while executing DRR SQL-request!\n" + ex.ToString());
+                    Logging.LogEvent(3, "SQLExecuter", "Error happened while executing DRR SQL-request!\n" + ex.ToString());
                 }
                 return null;
             }

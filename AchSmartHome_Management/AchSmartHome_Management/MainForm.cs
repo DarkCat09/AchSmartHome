@@ -45,22 +45,14 @@ namespace AchSmartHome_Management
         {
             InitializeComponent();
 
-            GlobalSettings.InitThemeAndLang(Controls, this);
-            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
-
-            panel1 = new Panel();
-            panel1.Name = "panel1";
-            panel1.Location = new System.Drawing.Point(12, 51);
-            panel1.AutoSize = true;
-            panel1.ControlAdded += new ControlEventHandler(PanelChanged);
-            Controls.Add(panel1);
+            Logging.DeleteLogFile();
 
             #region Checking configuration files
             foreach (string impfile in importantFiles)
             {
                 if (!File.Exists(impfile))
                 {
-                    Logging.LogEvent(2, $"File {impfile} not found!");
+                    Logging.LogEvent(2, "ConfFilesCheck", $"File {impfile} not found!");
                     ExtractFiles();
                     break;
                 }
@@ -79,6 +71,16 @@ namespace AchSmartHome_Management
             };
             #endregion
 
+            GlobalSettings.InitThemeAndLang(Controls, this);
+            saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
+
+            panel1 = new Panel();
+            panel1.Name = "panel1";
+            panel1.Location = new System.Drawing.Point(12, 51);
+            panel1.AutoSize = true;
+            panel1.ControlAdded += new ControlEventHandler(PanelChanged);
+            Controls.Add(panel1);
+
             ReplacePanel<ControlPanel>();
         }
 
@@ -86,25 +88,29 @@ namespace AchSmartHome_Management
         {
             try
             {
-                Logging.LogEvent(1, "Extracting archive files.zip from Resources ...");
+                Logging.LogEvent(1, "ExtractConfFiles", "Extracting archive files.zip from Resources ...");
                 #region Extracting files.zip
                 FileStream fzfs = File.Open("files.zip", FileMode.Create);
                 BinaryWriter fzbw = new BinaryWriter(fzfs);
                 fzbw.Write(Properties.Resources.files);
                 fzbw.Close();
                 fzfs.Close();
+                fzbw.Dispose();
+                fzfs.Dispose();
                 #endregion
 
-                Logging.LogEvent(1, "Extracting 7za.exe from Resources ...");
+                Logging.LogEvent(1, "ExtractConfFiles", "Extracting 7za.exe from Resources ...");
                 #region Extracting 7-Zip Standalone Executable
                 FileStream szfs = File.Open("7za.exe", FileMode.Create);
                 BinaryWriter szbw = new BinaryWriter(szfs);
                 szbw.Write(Properties.Resources._7za);
                 szbw.Close();
                 szfs.Close();
+                szbw.Dispose();
+                szfs.Dispose();
                 #endregion
 
-                Logging.LogEvent(1, "Extracting files using 7-Zip ...");
+                Logging.LogEvent(1, "ExtractConfFiles", "Extracting files using 7-Zip ...");
                 #region Executing 7-Zip to extract files.zip
                 ProcessStartInfo szpinfo = new ProcessStartInfo()
                 {
@@ -121,14 +127,16 @@ namespace AchSmartHome_Management
                 string line;
                 while ((line = szsrout.ReadLine()) != null)
                 {
-                    Logging.LogEvent(0, "7-Zip: " + line);
+                    Logging.LogEvent(0, "7-Zip", line);
                 }
                 szsrout.Close();
                 szp.WaitForExit(10000);
+                szp.Close();
+                szp.Dispose();
                 #endregion
             }
             catch (Exception ex) {
-                Logging.LogEvent(4, "Error happened while extracting files!\n" + ex.ToString());
+                Logging.LogEvent(4, "ExtractConfFiles", "Error happened while extracting files!\n" + ex.ToString());
                 DialogResult extractErrRes = MessageBox.Show(
                     Languages.GetLocalizedString("ExtractError", "Error happened while extracting files!"),
                     Languages.GetLocalizedString("Error", "Error"),
@@ -141,11 +149,11 @@ namespace AchSmartHome_Management
                         Close();
                         break;
                     case DialogResult.Retry:
-                        Logging.LogEvent(0, "Restarting application ...");
+                        Logging.LogEvent(0, "ErrorHandling", "Restarting application ...");
                         Application.Restart();
                         break;
                     case DialogResult.Ignore:
-                        Logging.LogEvent(2, "Extracting-files-error ignored!");
+                        Logging.LogEvent(2, "ErrorHandling", "Extracting-files-error ignored!");
                         break;
                 }
             }
@@ -163,7 +171,7 @@ namespace AchSmartHome_Management
 
             panelToAdd pta = new panelToAdd();
             logstring.Append($"to {pta} ...");
-            Logging.LogEvent(0, logstring.ToString());
+            Logging.LogEvent(0, "ReplacePanel", logstring.ToString());
 
             panel1.Controls.Clear();
             panel1.Controls.Add(pta);
@@ -188,7 +196,7 @@ namespace AchSmartHome_Management
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Logging.LogEvent(0, "Closing program ...");
+            Logging.LogEvent(0, "SimpleEventHandler", "Closing program ...");
             DatabaseConnecting.sqlDb.Close();
         }
 

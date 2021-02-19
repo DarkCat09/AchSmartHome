@@ -61,7 +61,7 @@ namespace AchSmartHome_Management
         {
             System.Collections.Generic.Dictionary<string, string> langFiles = Languages.InitLangs();
             int errcode = Languages.LoadLang(langFiles[Languages.curlang], langFiles);
-            Logging.LogEvent(3, $"Error happened while loading languages! LoadLang() exit code = {errcode}.");
+            Logging.LogEvent(3, "ThemeInitializer", $"Error happened while loading languages! LoadLang() exit code = {errcode}.");
 
             f.BackColor = theme;
             foreach (Control ctrl in ctrls)

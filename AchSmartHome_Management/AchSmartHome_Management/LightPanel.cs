@@ -62,7 +62,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "Error happened while sending SH-request!\n" + ex.ToString());
+                Logging.LogEvent(3, "LightPanel", "Error happened while sending SH-request!\n" + ex.ToString());
                 MessageBox.Show("Произошла ошибка!\n" + ex.Message);
             }
         }

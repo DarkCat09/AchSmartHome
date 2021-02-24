@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Spire.Xls;
+/*using Spire.Xls;*/
 
 namespace AchSmartHome_Management
 {
@@ -15,6 +15,7 @@ namespace AchSmartHome_Management
             Column2.HeaderText = Languages.GetLocalizedString("Name", "Sensor Name");
             Column3.HeaderText = Languages.GetLocalizedString("Value", "Value");
             toolTip1.SetToolTip(button2, Languages.GetLocalizedString("ExportToXls", "Export to Excel-spreadsheet"));
+            toolTip2.SetToolTip(button3, Languages.GetLocalizedString("MainSensorsToolTip", "Show main sensors"));
             GetSensorsValuesAndUpdate(DateTime.Now);
         }
         private void GetSensorsValuesAndUpdate(DateTime dt)
@@ -33,7 +34,7 @@ namespace AchSmartHome_Management
                 List<HomeSensor> otherSensors = new List<HomeSensor>();
                 for (int i = 0; i < sqlReqResult.Count; i+=4)
                 {
-                    if (sensorsNames.Contains(sqlReqResult[i + 2].ToString()))
+                    if (sensorsNames.Contains(sqlReqResult[i+2].ToString()))
                         continue;
                     sensorsNames.Add(sqlReqResult[i+2].ToString());
                     otherSensors.Add(new HomeSensor(

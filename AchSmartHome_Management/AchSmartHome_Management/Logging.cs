@@ -5,6 +5,13 @@ namespace AchSmartHome_Management
 {
     class Logging
     {
+        /// <summary>
+        /// Записать событие в лог-файл.
+        /// Write event to log-file.
+        /// </summary>
+        /// <param name="level">Уровень события (0=Information,1=Debug,2=Warning,3=Error,4=Fatal)</param>
+        /// <param name="app">Название части программы, логирующей событие</param>
+        /// <param name="message">Описание события (сообщение)</param>
         public static void LogEvent(short level, string app, string message)
         {
             try
@@ -41,6 +48,10 @@ namespace AchSmartHome_Management
             }
             catch (Exception) {}
         }
+        /// <summary>
+        /// Function deletes temporary log-file.
+        /// Удаляет временный лог-файл.
+        /// </summary>
         public static void DeleteLogFile()
         {
             try

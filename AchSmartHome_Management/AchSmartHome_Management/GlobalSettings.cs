@@ -61,9 +61,14 @@ namespace AchSmartHome_Management
         {
             System.Collections.Generic.Dictionary<string, string> langFiles = Languages.InitLangs();
             int errcode = Languages.LoadLang(langFiles[Languages.curlang], langFiles);
-            Logging.LogEvent(3, "ThemeInitializer", $"Error happened while loading languages! LoadLang() exit code = {errcode}.");
+            if (errcode != 0)
+                Logging.LogEvent(
+                    3, "ThemeInitializer", $"Error happened while loading languages! LoadLang() exit code = {errcode}."
+                );
 
-            f.BackColor = theme;
+            if (f != null)
+                f.BackColor = theme;
+
             foreach (Control ctrl in ctrls)
             {
                 if (DoesThisElemColorChanging(ctrl))
@@ -71,65 +76,13 @@ namespace AchSmartHome_Management
                 if (ctrl is LinkLabel)
                     ((LinkLabel)ctrl).LinkColor = fontcol;
 
-                //for Panel
-                if (ctrl is Panel)
-                {
-                    foreach (Control panelctrl in ((Panel)ctrl).Controls)
-                    {
-                        if (DoesThisElemColorChanging(panelctrl))
-                            panelctrl.ForeColor = fontcol;
-                        if (panelctrl is LinkLabel)
-                            ((LinkLabel)panelctrl).LinkColor = fontcol;
+                // for Panel
+                if (ctrl is Panel panel)
+                    InitThemeAndLang(panel.Controls, null);
 
-                        if (panelctrl.Tag != null)
-                        {
-                            if (Languages.Lang.ContainsKey(panelctrl.Tag.ToString()))
-                            {
-                                panelctrl.Text = Languages.Lang[panelctrl.Tag.ToString()];
-                            }
-                        }
-                    }
-                }
-
-                //for TableLayoutPanel
-                if (ctrl is TableLayoutPanel)
-                {
-                    foreach (Control tablectrl in ((TableLayoutPanel)ctrl).Controls)
-                    {
-                        //for Panel
-                        if (tablectrl is Panel)
-                        {
-                            foreach (Control panelctrl in ((Panel)tablectrl).Controls)
-                            {
-                                if (DoesThisElemColorChanging(panelctrl))
-                                    panelctrl.ForeColor = fontcol;
-                                if (panelctrl is LinkLabel)
-                                    ((LinkLabel)panelctrl).LinkColor = fontcol;
-
-                                if (panelctrl.Tag != null)
-                                {
-                                    if (Languages.Lang.ContainsKey(panelctrl.Tag.ToString()))
-                                    {
-                                        panelctrl.Text = Languages.Lang[panelctrl.Tag.ToString()];
-                                    }
-                                }
-                            }
-                        }
-
-                        if (DoesThisElemColorChanging(tablectrl))
-                            tablectrl.ForeColor = fontcol;
-                        if (tablectrl is LinkLabel)
-                            ((LinkLabel)tablectrl).LinkColor = fontcol;
-
-                        if (tablectrl.Tag != null)
-                        {
-                            if (Languages.Lang.ContainsKey(tablectrl.Tag.ToString()))
-                            {
-                                tablectrl.Text = Languages.Lang[tablectrl.Tag.ToString()];
-                            }
-                        }
-                    }
-                }
+                // for TableLayoutPanel
+                if (ctrl is TableLayoutPanel tlpanel)
+                    InitThemeAndLang(tlpanel.Controls, null);
 
                 if (ctrl.Tag != null)
                 {

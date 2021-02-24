@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Drawing;
 using System.Data.Common;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -93,7 +94,7 @@ namespace AchSmartHome_Management
                     }
                 }
                 Logging.LogEvent(
-                    0, "SQLExecuter", "Executing SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                    0, "SQLExecuter", $"Executing SQL-request:\n{sqlRequest}\nParams:\n{paramsForLog}"
                 );
                 DbDataReader dbdr = sqlCommand.ExecuteReader();
                 int read_index = 0;
@@ -111,10 +112,12 @@ namespace AchSmartHome_Management
                     read_index++;
                 }
                 dbdr.Close();
+                dbdr.Dispose();
+                sqlCommand.Dispose();
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "SQLExecuter", "Error happened while executing SQL-request:\n" + ex.ToString());
+                Logging.LogEvent(3, "SQLExecuter", $"Error happened while executing SQL-request:\n{ex}");
             }
             return sqlReqResult;
         }
@@ -144,16 +147,54 @@ namespace AchSmartHome_Management
                         }
                     }
                     Logging.LogEvent(
-                        0, "SQLExecuter", "Executing DRR SQL-request:\n" + sqlRequest + "\nParams:\n" + paramsForLog
+                        0, "SQLExecuter", $"Executing DRR SQL-request:\n{sqlRequest}\nParams:\n{paramsForLog}"
                     );
                     sqlCommand.ExecuteNonQuery();
+                    sqlCommand.Dispose();
                 }
                 catch (Exception ex)
                 {
-                    Logging.LogEvent(3, "SQLExecuter", "Error happened while executing DRR SQL-request!\n" + ex.ToString());
+                    Logging.LogEvent(3, "SQLExecuter", $"Error happened while executing DRR SQL-request!\n{ex}");
                 }
                 return null;
             }
+        }
+        public static Image GetImageByRequest(string sqlRequest)
+        {
+            Image img = null;
+            MySqlCommand sqlCommand = new MySqlCommand(sqlRequest, sqlDb);
+            try
+            {
+                Logging.LogEvent(0, "SQLExecuter", $"Executing SQL-request to get image:\n{sqlRequest}");
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                while (sqlReader.Read())
+                {
+                    // Предполагается, что в запросе 1 столбец, и в нём картинка
+                    Logging.LogEvent(1, "SQLExecuter", "Trying to read BLOB-data ...");
+                    byte[] data = (byte[])sqlReader.GetValue(0);
+                    try
+                    {
+                        Logging.LogEvent(1, "SQLExecuter", "Writing BLOB to MemoryStream ...");
+                        MemoryStream ms = new MemoryStream(data, 0, data.Length);
+                        ms.Write(data, 0, data.Length);
+                        Logging.LogEvent(1, "SQLExecuter", "Creating image object from Stream ...");
+                        img = Image.FromStream(ms, true);
+                        ms.Close();
+                        ms.Dispose();
+                    }
+                    catch (Exception ex) {
+                        Logging.LogEvent(3, "SQLExecuter", $"Error happened while creating image!\n{ex}");
+                    }
+                }
+                sqlReader.Close();
+                sqlReader.Dispose();
+                sqlCommand.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Logging.LogEvent(3, "SQLExecuter", $"Error happened while receiving image by SQL-request!\n{ex}");
+            }
+            return img;
         }
     }
 }

@@ -29,6 +29,7 @@ namespace AchSmartHome_Management
         public static bool minimizeToTray = Properties.Settings.Default.min_to_tray;
         public static bool dontWorkInBackground = Properties.Settings.Default.dont_work_in_bg;
         public static bool autoUpdateSensorsVals = Properties.Settings.Default.auto_upd_values;
+        public static bool showNavigationPanel = Properties.Settings.Default.show_nav_panel;
 
         public static void ChangeSettings(
             string _language,
@@ -57,13 +58,20 @@ namespace AchSmartHome_Management
             Properties.Settings.Default.Save();
         }
 
+        public static void ChangeViewSettings(bool _showNavPanel)
+        {
+            showNavigationPanel = _showNavPanel;
+            Properties.Settings.Default.show_nav_panel = _showNavPanel;
+            Properties.Settings.Default.Save();
+        }
+
         public static void InitThemeAndLang(Control.ControlCollection ctrls, Control f)
         {
             System.Collections.Generic.Dictionary<string, string> langFiles = Languages.InitLangs();
             int errcode = Languages.LoadLang(langFiles[Languages.curlang], langFiles);
             if (errcode != 0)
                 Logging.LogEvent(
-                    3, "ThemeInitializer", $"Error happened while loading languages! LoadLang() exit code = {errcode}."
+                    3, "ThemeInitializer", $"An error happened while loading languages! LoadLang() exit code = {errcode}."
                 );
 
             if (f != null)

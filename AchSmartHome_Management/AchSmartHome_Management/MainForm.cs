@@ -64,7 +64,7 @@ namespace AchSmartHome_Management
             if (!DatabaseConnecting.ConnectToDb())
             {
                 MessageBox.Show(
-                    "Error happened while connecting to database! Application will be closed.", "Error",
+                    "An error happened while connecting to database! Application will be closed.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
                 Close();
@@ -82,6 +82,8 @@ namespace AchSmartHome_Management
             Controls.Add(panel1);
 
             ReplacePanel<ControlPanel>();
+            панельНавигацииToolStripMenuItem.Checked = GlobalSettings.showNavigationPanel;
+            ChangeNavPanelVisibility(GlobalSettings.showNavigationPanel);
         }
 
         private void ExtractFiles()
@@ -136,9 +138,9 @@ namespace AchSmartHome_Management
                 #endregion
             }
             catch (Exception ex) {
-                Logging.LogEvent(4, "ExtractConfFiles", "Error happened while extracting files!\n" + ex.ToString());
+                Logging.LogEvent(4, "ExtractConfFiles", "An error happened while extracting files!\n" + ex.ToString());
                 DialogResult extractErrRes = MessageBox.Show(
-                    Languages.GetLocalizedString("ExtractError", "Error happened while extracting files!"),
+                    Languages.GetLocalizedString("ExtractError", "An error happened while extracting files!"),
                     Languages.GetLocalizedString("Error", "Error"),
                     MessageBoxButtons.AbortRetryIgnore,
                     MessageBoxIcon.Error
@@ -194,6 +196,11 @@ namespace AchSmartHome_Management
             ReplacePanel<ControlPanel>();
         }
 
+        private void пользовательскиеДатчикиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReplacePanel<OtherSensorsPanel>();
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Logging.LogEvent(0, "SimpleEventHandler", "Closing program ...");
@@ -224,6 +231,11 @@ namespace AchSmartHome_Management
         private void светToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ReplacePanel<LightPanel>();
+        }
+
+        private void умныйЗвонокToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReplacePanel<WirelessDoorbell>();
         }
 
         private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
@@ -284,6 +296,7 @@ namespace AchSmartHome_Management
             }
             catch (InvalidOperationException) {}
         }
+
         /// <summary>
         /// Go to the next page
         /// Перейти на следующую страницу
@@ -370,6 +383,26 @@ namespace AchSmartHome_Management
 
             else
                 return 6;
+        }
+
+        private void ChangeNavPanelVisibility(bool showPanel)
+        {
+            if (showPanel)
+            {
+                panel3.Visible = true;
+                panel3.Size = new System.Drawing.Size(panel3.Size.Width, 29);
+            }
+            else
+            {
+                panel3.Visible = false;
+                panel3.Size = new System.Drawing.Size(panel3.Size.Width, 0); // Я не хочу удалять элемент
+            }
+        }
+
+        private void панельНавигацииToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            GlobalSettings.ChangeViewSettings(панельНавигацииToolStripMenuItem.Checked);
+            ChangeNavPanelVisibility(панельНавигацииToolStripMenuItem.Checked);
         }
     }
 }

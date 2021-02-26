@@ -57,7 +57,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "OtherSensors", "Error happened while updating custom sensors values!\n" + ex.ToString());
+                Logging.LogEvent(3, "OtherSensors", "An error happened while updating custom sensors values!\n" + ex.ToString());
                 MessageBox.Show("Произошла ошибка!\n" + ex.Message);
             }
         }

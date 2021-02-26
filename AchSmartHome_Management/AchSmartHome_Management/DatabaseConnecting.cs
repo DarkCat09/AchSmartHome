@@ -52,7 +52,7 @@ namespace AchSmartHome_Management
             catch (Exception ex)
             {
                 Logging.LogEvent(3, "SQLConnectOptions", "Can\'t read database params!\n" + ex.ToString());
-                _ = MessageBox.Show("Error happened while reading database parameters!");
+                _ = MessageBox.Show("An error happened while reading database parameters!");
             }
         }
         public static bool ConnectToDb(string advancedServer = "")
@@ -117,7 +117,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "SQLExecuter", $"Error happened while executing SQL-request:\n{ex}");
+                Logging.LogEvent(3, "SQLExecuter", $"An error happened while executing SQL-request:\n{ex}");
             }
             return sqlReqResult;
         }
@@ -154,7 +154,7 @@ namespace AchSmartHome_Management
                 }
                 catch (Exception ex)
                 {
-                    Logging.LogEvent(3, "SQLExecuter", $"Error happened while executing DRR SQL-request!\n{ex}");
+                    Logging.LogEvent(3, "SQLExecuter", $"An error happened while executing DRR SQL-request!\n{ex}");
                 }
                 return null;
             }
@@ -183,7 +183,7 @@ namespace AchSmartHome_Management
                         ms.Dispose();
                     }
                     catch (Exception ex) {
-                        Logging.LogEvent(3, "SQLExecuter", $"Error happened while creating image!\n{ex}");
+                        Logging.LogEvent(3, "SQLExecuter", $"An error happened while creating image!\n{ex}");
                     }
                 }
                 sqlReader.Close();
@@ -192,7 +192,7 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "SQLExecuter", $"Error happened while receiving image by SQL-request!\n{ex}");
+                Logging.LogEvent(3, "SQLExecuter", $"An error happened while receiving image by SQL-request!\n{ex}");
             }
             return img;
         }

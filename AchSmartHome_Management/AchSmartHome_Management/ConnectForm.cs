@@ -1,7 +1,24 @@
-﻿using System;
-using System.Data.Common;
+﻿/*
+ * Copyright © 2020-2021 Чечкенёв Андрей
+ * 
+ * This file is part of AchSmartHome.
+ * 
+ * AchSmartHome is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * AchSmartHome is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with AchSmartHome.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace AchSmartHome_Management
 {
@@ -10,49 +27,16 @@ namespace AchSmartHome_Management
         public ConnectForm()
         {
             InitializeComponent();
+            GlobalSettings.InitThemeAndLang(Controls, this);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*if (textBox3.Text != "")
-            {
-                bool passMatching = BCrypt.Net.BCrypt.Verify(
-                    textBox3.Text,
-                    "$2y$10$1mVLdb6P4G8NebmECg8ugeBI6zR.uen9k9qINqvZLGGjCFBabb7g6" // I will receive this value (now is Admin123) from database
-                );
-                _ = MessageBox.Show(passMatching.ToString());
-            }*/
             try
             {
-                /*
-                MySqlConnection sqlDb = DatabaseConnecting.ConnectToDb(textBox1.Text);
-                sqlDb.Open();
-                MySqlCommand sqlRequest =
-                    new MySqlCommand("SELECT * FROM users WHERE name = \"" + textBox2.Text + "\"", sqlDb);
-
-                DbDataReader dbdr = sqlRequest.ExecuteReader();
-                if (dbdr.HasRows)
-                {
-                    dbdr.Read();
-                    if (BCrypt.Net.BCrypt.Verify(textBox3.Text, dbdr.GetString(2)))
-                    {
-                        Form1.userid = dbdr.GetInt32(0);
-                        Form1.username = dbdr.GetString(1);
-                        Form1.userprivs = dbdr.GetInt32(3);
-                    }
-                    else
-                    {
-                        _ = MessageBox.Show("Username or password is incorrect!");
-                    }
-                }
-                else
-                {
-                    _ = MessageBox.Show("Username or password is incorrect!");
-                }
-                dbdr.Close();
-                sqlDb.Close();
-                */
-                System.Collections.Generic.List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest("SELECT * FROM users WHERE name = \"" + textBox2.Text + "\"");
+                System.Collections.Generic.List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
+                    $"SELECT * FROM users WHERE name = \"{textBox2.Text}\""
+                );
                 if (sqlReqResult.Count > 0)
                 {
                     if (BCrypt.Net.BCrypt.Verify(textBox3.Text, sqlReqResult[2].ToString()))
@@ -60,22 +44,18 @@ namespace AchSmartHome_Management
                         MainForm.userid = Convert.ToInt32(sqlReqResult[0]);
                         MainForm.username = sqlReqResult[1].ToString();
                         MainForm.userprivs = Convert.ToInt32(sqlReqResult[3]);
-                    }
-                    else
-                    {
-                        _ = MessageBox.Show("Username or password is incorrect!");
+                        Close();
                     }
                 }
-                else
-                {
-                    _ = MessageBox.Show("Username or password is incorrect!");
-                }
+                MessageBox.Show(Languages.GetLocalizedString("UserPasswdError", "Username or password is incorrect!"));
             }
             catch (Exception ex)
             {
-                _ = MessageBox.Show("Error happened!\n" + ex.Message);
+                MessageBox.Show(
+                    $"{Languages.GetLocalizedString("ErrorHappened", "An error happened!")}\n{ex.Message}"
+                );
+                Close();
             }
-            Close();
         }
     }
 }

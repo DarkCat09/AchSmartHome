@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2020 Чечкенёв Андрей
+ * Copyright © 2020-2021 Чечкенёв Андрей
  * 
  * This file is part of AchSmartHome.
  * 
@@ -52,7 +52,7 @@ namespace AchSmartHome_Management
 
         private void GetSensorsValuesAndUpdate(DateTime dt)
         {
-            Logging.LogEvent(0, "ControlPanelUpdater", "Updating main sensors values... DT = " + dt.ToString("dd.MM.yyyy,HH:mm"));
+            Logging.LogEvent(0, "ControlPanelUpdater", $"Updating main sensors values... DT = {dt:dd.MM.yyyy,HH:mm}");
             try
             {
                 label1.Text     = sensorsText[0];
@@ -100,8 +100,8 @@ namespace AchSmartHome_Management
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "ControlPanelUpdater", "Error happened while updating main sensors values!\n" + ex.ToString());
-                _ = MessageBox.Show("Произошла ошибка!\n" + ex.Message);
+                Logging.LogEvent(3, "ControlPanelUpdater", $"An error happened while updating main sensors values!\n{ex}");
+                _ = MessageBox.Show($"Произошла ошибка!\n{ex.Message}");
             }
         }
 

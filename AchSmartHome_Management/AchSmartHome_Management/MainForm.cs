@@ -21,8 +21,6 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;
 
 namespace AchSmartHome_Management
 {
@@ -33,9 +31,6 @@ namespace AchSmartHome_Management
             "langs.conf", "database.conf"
         };
 
-        public static string regusername = "", regpasshash = "";
-        public static string username = "", passhash = "";
-        public static int userid = 0, userprivs = 3;
         public static Panel panel1 = null;
 
         private static MyStack<int> prevPanelsType = new MyStack<int>();
@@ -71,6 +66,8 @@ namespace AchSmartHome_Management
             };
             #endregion
 
+            Accounts.LoadCredentials();
+
             GlobalSettings.InitThemeAndLang(Controls, this);
             saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
 
@@ -80,6 +77,9 @@ namespace AchSmartHome_Management
             panel1.AutoSize = true;
             panel1.ControlAdded += new ControlEventHandler(PanelChanged);
             Controls.Add(panel1);
+
+            if (Accounts.username.Trim() == "")
+                соединитьсяToolStripMenuItem_Click(null, null);
 
             ReplacePanel<ControlPanel>();
             панельНавигацииToolStripMenuItem.Checked = GlobalSettings.showNavigationPanel;
@@ -209,23 +209,9 @@ namespace AchSmartHome_Management
 
         private void регистрацияToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (userprivs == 0)
-            {
-                RegisterUser ruForm = new RegisterUser();
-                ruForm.ShowDialog();
-                ruForm.Dispose();
-
-                DatabaseConnecting.ProcessSqlRequest(
-                    "INSERT INTO users(name, passhash, privs) VALUES (?username, ?passhash, 1)",
-                    new List<MySqlParameter>() {
-                        new MySqlParameter("username", regusername), new MySqlParameter("passhash", regpasshash)
-                    }, true
-                );
-            }
-            else
-            {
-                _ = MessageBox.Show(Languages.GetLocalizedString("InsufPrivs", "Insufficient Privileges!"));
-            }
+            RegisterUser ruForm = new RegisterUser();
+            ruForm.ShowDialog();
+            ruForm.Dispose();
         }
 
         private void светToolStripMenuItem_Click(object sender, EventArgs e)
@@ -252,7 +238,12 @@ namespace AchSmartHome_Management
         private void копироватьЛогфайлToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
-                File.Copy($"{Path.GetTempPath()}achsmarthome_mgmt.log", saveFileDialog1.FileName, true);
+            {
+                Logging.LogEvent(
+                    0, "Logging", $"Copying log-file from {Logging.temp_path} to {saveFileDialog1.FileName}"
+                );
+                File.Copy($"{Logging.temp_path}achsmarthome_mgmt.log", saveFileDialog1.FileName, true);
+            }
         }
 
         /// <summary>
@@ -389,11 +380,13 @@ namespace AchSmartHome_Management
         {
             if (showPanel)
             {
+                panel1.Location = new System.Drawing.Point(panel1.Location.X, 51);
                 panel3.Visible = true;
                 panel3.Size = new System.Drawing.Size(panel3.Size.Width, 29);
             }
             else
             {
+                panel1.Location = new System.Drawing.Point(panel1.Location.X, 24);
                 panel3.Visible = false;
                 panel3.Size = new System.Drawing.Size(panel3.Size.Width, 0); // Я не хочу удалять элемент
             }

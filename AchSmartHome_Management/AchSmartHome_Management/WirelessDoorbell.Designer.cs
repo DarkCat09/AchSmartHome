@@ -41,22 +41,20 @@ namespace AchSmartHome_Management
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Location = new System.Drawing.Point(0, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.Size = new System.Drawing.Size(402, 13);
             this.label1.TabIndex = 0;
             this.label1.Tag = "DoorbellDateTime";
             this.label1.Text = "Время звонка: ";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Location = new System.Drawing.Point(0, 20);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 13);
+            this.label2.Size = new System.Drawing.Size(402, 13);
             this.label2.TabIndex = 1;
             this.label2.Tag = "Photos";
             this.label2.Text = "Фотографии:";
@@ -133,7 +131,6 @@ namespace AchSmartHome_Management
             this.Size = new System.Drawing.Size(402, 308);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

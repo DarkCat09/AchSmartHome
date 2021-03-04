@@ -24,6 +24,7 @@ mono_crash.*
 [Dd]ebug/*.config
 [Dd]ebug/*.dll
 [Dd]ebug/*.xml
+[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/

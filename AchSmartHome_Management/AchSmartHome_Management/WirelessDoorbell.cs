@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace AchSmartHome_Management
@@ -30,9 +29,11 @@ namespace AchSmartHome_Management
             pictureBox1.Image = DatabaseConnecting.GetImageByRequest(
                 $"SELECT picture FROM doorbell WHERE photonum = {imageNavPos} ORDER BY photosid DESC LIMIT 1"
             );
-            label1.Text += DatabaseConnecting.ProcessSqlRequest(
-                $"SELECT camdatetime FROM doorbell WHERE photonum = 1 ORDER BY photosid DESC LIMIT 1"
-            )[0];
+            label1.Text =
+                Languages.GetLocalizedString("DoorbellDateTime", "Doorbell rang at:") +
+                DatabaseConnecting.ProcessSqlRequest(
+                    $"SELECT camdatetime FROM doorbell WHERE photonum = 1 ORDER BY photosid DESC LIMIT 1"
+                )[0];
         }
 
         private void label3_Click(object sender, EventArgs e)

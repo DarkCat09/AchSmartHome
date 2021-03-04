@@ -106,5 +106,29 @@ namespace AchSmartHome_Management.Properties {
                 this["show_nav_panel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cookie_username {
+            get {
+                return ((string)(this["cookie_username"]));
+            }
+            set {
+                this["cookie_username"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cookie_passhash {
+            get {
+                return ((string)(this["cookie_passhash"]));
+            }
+            set {
+                this["cookie_passhash"] = value;
+            }
+        }
     }
 }

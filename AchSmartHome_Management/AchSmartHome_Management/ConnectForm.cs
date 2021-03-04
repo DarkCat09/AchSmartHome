@@ -34,20 +34,18 @@ namespace AchSmartHome_Management
         {
             try
             {
-                System.Collections.Generic.List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
-                    $"SELECT * FROM users WHERE name = \"{textBox2.Text}\""
-                );
-                if (sqlReqResult.Count > 0)
+                if (!Accounts.CheckUserCredentials(textBox2.Text.Trim(), textBox3.Text))
+                    MessageBox.Show(
+                        Languages.GetLocalizedString("UserPasswdError", "Username or password is incorrect!")
+                    );
+                else
                 {
-                    if (BCrypt.Net.BCrypt.Verify(textBox3.Text, sqlReqResult[2].ToString()))
-                    {
-                        MainForm.userid = Convert.ToInt32(sqlReqResult[0]);
-                        MainForm.username = sqlReqResult[1].ToString();
-                        MainForm.userprivs = Convert.ToInt32(sqlReqResult[3]);
-                        Close();
-                    }
+                    Accounts.username = textBox2.Text.Trim();
+                    Accounts.passhash = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(textBox3.Text));
+                    Accounts.GetUserData();
+                    Accounts.SaveCredentials();
+                    Close();
                 }
-                MessageBox.Show(Languages.GetLocalizedString("UserPasswdError", "Username or password is incorrect!"));
             }
             catch (Exception ex)
             {

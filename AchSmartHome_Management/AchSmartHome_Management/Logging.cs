@@ -5,6 +5,7 @@ namespace AchSmartHome_Management
 {
     class Logging
     {
+        public static string temp_path = Path.GetTempPath();
         /// <summary>
         /// Записать событие в лог-файл.
         /// Write event to log-file.
@@ -44,7 +45,7 @@ namespace AchSmartHome_Management
                 preparedMessage =
                     $"{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff} {strLevel}/{app}:{tabulations}{preparedMessage}\n";
 
-                File.AppendAllText($"{Path.GetTempPath()}achsmarthome_mgmt.log", preparedMessage);
+                File.AppendAllText($"{temp_path}achsmarthome_mgmt.log", preparedMessage);
             }
             catch (Exception) {}
         }
@@ -56,7 +57,7 @@ namespace AchSmartHome_Management
         {
             try
             {
-                File.Delete($"{Path.GetTempPath()}achsmarthome_mgmt.log");
+                File.Delete($"{temp_path}achsmarthome_mgmt.log");
             }
             catch (Exception ex)
             {

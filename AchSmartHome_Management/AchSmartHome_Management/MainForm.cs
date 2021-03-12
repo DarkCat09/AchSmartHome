@@ -78,7 +78,7 @@ namespace AchSmartHome_Management
             panel1.ControlAdded += new ControlEventHandler(PanelChanged);
             Controls.Add(panel1);
 
-            if (Accounts.username.Trim() == "")
+            while (Accounts.username.Trim().Equals(""))
                 соединитьсяToolStripMenuItem_Click(null, null);
 
             ReplacePanel<ControlPanel>();
@@ -161,18 +161,26 @@ namespace AchSmartHome_Management
             }
         }
 
-        public static void ReplacePanel<panelToAdd>() where panelToAdd : Control, new()
+        /// <summary>
+        /// Function replaces management panel on application main form. 
+        /// Заменяет панель управления на главной форме приложения.
+        /// </summary>
+        /// <typeparam name="panelToAdd">Класс панели, на которую нужно заменить текущую</typeparam>
+        /// <param name="appendToStack">Добавить старую панель в стек автоматически? (Полезно для GoBack/GoNext)</param>
+        public static void ReplacePanel<panelToAdd>(bool appendToStack = true) where panelToAdd : Control, new()
         {
             System.Text.StringBuilder logstring = new System.Text.StringBuilder("Changing panel ");
 
             if (panel1.Controls.Count > 0)
             {
-                prevPanelsType.Push(GetPanelType(panel1.Controls[0]));
+                if (appendToStack)
+                    prevPanelsType.Push(GetPanelType(panel1.Controls[0]));
+
                 logstring.Append($"from {panel1.Controls[0]} ");
             }
 
             panelToAdd pta = new panelToAdd();
-            logstring.Append($"to {pta} ...");
+            logstring.Append($"to {pta} ...\nAppendToStack={appendToStack}");
             Logging.LogEvent(0, "ReplacePanel", logstring.ToString());
 
             panel1.Controls.Clear();
@@ -255,6 +263,8 @@ namespace AchSmartHome_Management
         {
             try
             {
+                Logging.LogEvent(1, "PageChange", $"GoBackPage({form}) started!");
+
                 int beforeBackPanel = GetPanelType(panel1.Controls[0]);
                 int prevPanelType = prevPanelsType.Peek();
 
@@ -263,27 +273,29 @@ namespace AchSmartHome_Management
                 switch (prevPanelType)
                 {
                     case 0:
-                        ReplacePanel<ControlPanel>();
+                        ReplacePanel<ControlPanel>(false);
                         break;
                     case 1:
-                        ReplacePanel<LightPanel>();
+                        ReplacePanel<LightPanel>(false);
                         break;
                     case 2:
-                        ReplacePanel<OtherSensorsPanel>();
+                        ReplacePanel<OtherSensorsPanel>(false);
                         break;
                     case 3:
                         panel1.Controls.Clear();
                         panel1.Controls.Add(new SettingsForm((Form)form));
                         break;
                     case 4:
-                        ReplacePanel<AboutProgram>();
+                        ReplacePanel<AboutProgram>(false);
                         break;
                     case 5:
-                        ReplacePanel<WirelessDoorbell>();
+                        ReplacePanel<WirelessDoorbell>(false);
                         break;
                 }
                 prevPanelsType.Pop();
                 nextPanelsType.Push(beforeBackPanel);
+
+                Logging.LogEvent(0, "PageChange", "Completed!");
             }
             catch (InvalidOperationException) {}
         }
@@ -297,6 +309,8 @@ namespace AchSmartHome_Management
         {
             try
             {
+                Logging.LogEvent(1, "PageChange", $"GoNextPage({form}) started!");
+
                 int beforeNextPanel = GetPanelType(panel1.Controls[0]);
                 int nextPanelType = nextPanelsType.Peek();
 
@@ -305,27 +319,29 @@ namespace AchSmartHome_Management
                 switch (nextPanelType)
                 {
                     case 0:
-                        ReplacePanel<ControlPanel>();
+                        ReplacePanel<ControlPanel>(false);
                         break;
                     case 1:
-                        ReplacePanel<LightPanel>();
+                        ReplacePanel<LightPanel>(false);
                         break;
                     case 2:
-                        ReplacePanel<OtherSensorsPanel>();
+                        ReplacePanel<OtherSensorsPanel>(false);
                         break;
                     case 3:
                         panel1.Controls.Clear();
                         panel1.Controls.Add(new SettingsForm((Form)form));
                         break;
                     case 4:
-                        ReplacePanel<AboutProgram>();
+                        ReplacePanel<AboutProgram>(false);
                         break;
                     case 5:
-                        ReplacePanel<WirelessDoorbell>();
+                        ReplacePanel<WirelessDoorbell>(false);
                         break;
                 }
                 nextPanelsType.Pop();
                 prevPanelsType.Push(beforeNextPanel);
+
+                Logging.LogEvent(0, "PageChange", "Completed!");
             }
             catch (InvalidOperationException) {}
         }

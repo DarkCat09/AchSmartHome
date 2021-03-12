@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright © 2020 Чечкенёв Андрей
  * 
  * This file is part of AchSmartHome.

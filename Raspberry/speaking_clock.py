@@ -1,6 +1,6 @@
 ## Speaking clock for AchSmartHome
 ##
-## Copyright © 2020 Чечкенёв Андрей
+## Copyright © 2020-2021 Чечкенёв Андрей
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -18,48 +18,102 @@
 import os
 import time
 import datetime
+import json
+import requests
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
 
+# Настраиваем распознавание речи и плеер
 recog = sr.Recognizer()
 mic = sr.Microphone()
+mixer.pre_init(44100, -16, 2, 1024)
+mixer.init()
 
+# Функция для поиска команды в выводе распознователя:
+# Вывод SR, варианты команды
+def user_said(sr_out, cmds):
+	srlower = sr_out.lower()
+	for cmd in cmds:
+		if (srlower.find(cmd) > -1):
+			return True
+	return False
+
+# Функция для синтезации речи:
+def say(text_to_synth):
+	# Сохраняем файл с синтезированной Гуглом речью
+	gTTS(text=text_to_synth, lang='ru').save('tts.mp3')
+	time.sleep(0.01)
+	# Подгружаем и запускаем файлик
+	mixer.music.load('tts.mp3')
+	mixer.music.play()
+	# Ждём, пока tts всё скажет...
+	while mixer.music.get_busy():
+		time.sleep(0.01)
+	# Останавливаем воспроизведение
+	mixer.music.stop()
+	time.sleep(0.01)
+	# Удаляем файл
+	if os.path.exists('tts.mp3'):
+		os.remove('tts.mp3')
+	time.sleep(0.01)
+
+# Основной цикл
 try:
 	while True:
 		with mic as audio_file:
+
+			# Записываем речь
 			recog.adjust_for_ambient_noise(audio_file)
 			audio = recog.listen(audio_file)
+
 			try:
+
+				# Распознаём с помощью сервисов Google
 				phrase = recog.recognize_google(audio, language='ru-RU')
 				print(phrase)
-				if (phrase.lower().find("сколько время") > -1) or \
-				(phrase.lower().find("сколько сейчас время") > -1) or \
-				(phrase.lower().find("только сейчас время") > -1):
+
+				# Приветствие
+				if user_said(phrase, ['привет','здравствуй','доброе утро','добрый день','добрый вечер']):
+					say('Здравствуйте!')
+
+				# Сколько время?
+				if user_said(phrase, ['сколько время','сколько сейчас время', 'только сейчас время']):
 					# слово "только" добавлено из-за
 					# некорректности распознавания в некоторых случаях
-					mixer.init()
 					now = datetime.datetime.now()
-					gTTS(text=str(now.strftime('%H:%M')), lang='ru').save("time.mp3")
-					mixer.music.load("time.mp3")
-					mixer.music.play()
-					while mixer.music.get_busy():
-						time.sleep(0.01)
-					mixer.music.stop()
-					mixer.quit()
-					time.sleep(0.01)
-					if os.path.exists("time.mp3"):
-						os.remove("time.mp3")
-					time.sleep(0.01)
+					say(str(now.strftime('%H:%M')))
+
+				# Определяем город
+				if user_said(phrase, ['местоположение','текущий город','где я нахожусь']):
+
+					# Получаем IP-адрес
+					curip = requests.get('http://ifconfig.me/ip').text
+					# Определяем город через API DaData
+					api_url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip='+curip+'&language=ru'
+					api_token = 'Token cb94fce6082599b4fc7b97c8826c344415a3c3ea'
+
+					api_result = requests.get( \
+						api_url, \
+						headers={'Accept': 'application/json', 'Authorization': api_token}).text
+
+					api_json_result = json.loads(api_result)['location']
+
+					if (api_json_result != None):
+						country = api_json_result['data']['country']
+						city_type = api_json_result['data']['city_type_full']
+						city_name = api_json_result['data']['city']
+						say('Текущее местоположение: '+country+', '+city_type+' '+city_name)
+
 			except Exception as ex:
-				print("")
 				print("Error happened!", \
 				str(datetime.datetime.now().strftime('%H:%M:%S')), \
 				str(ex), sep='\n')
-				print("")
+
 except KeyboardInterrupt:
-	print("")
 	print("Stopped by keyboard!", \
 	str(datetime.datetime.now().strftime('%H:%M:%S')), \
 	sep='\n')
-	print("")
+
+finally:
+	mixer.quit()

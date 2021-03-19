@@ -20,6 +20,7 @@ import time
 import datetime
 import json
 import requests
+import wikipedia
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
@@ -29,6 +30,7 @@ recog = sr.Recognizer()
 mic = sr.Microphone()
 mixer.pre_init(44100, -16, 2, 1024)
 mixer.init()
+wikipedia.set_lang('ru')
 
 # Функция для поиска команды в выводе распознователя:
 # Вывод SR, варианты команды
@@ -104,6 +106,22 @@ try:
 						city_type = api_json_result['data']['city_type_full']
 						city_name = api_json_result['data']['city']
 						say('Текущее местоположение: '+country+', '+city_type+' '+city_name)
+
+				# Поиск в Википедии
+				if user_said(phrase, ['википедия','википедии']):
+
+					# Определяем, что именно сказал пользователь: википедиЯ или (найти в)википедиИ
+					wiki_ending = ''
+					if (phrase.lower().find('википедия') > -1):
+						wiki_ending = 'я'
+					elif (phrase.lower().find('википедии') > -1):
+						wiki_ending = 'и'
+
+					# Вырезаем из фразы данные о желаемой статье (предположительный заголовок),
+					# Берём первый абзац об этом из Википедии и TTS'им.
+					# Число 10 = кол-во отсекаемых символов для получения только заголовка
+					# (9 букв из слова "википедия" + 1 пробел)
+					say(wikipedia.summary(phrase[phrase.find('википеди'+wiki_ending)+10:]))
 
 			except Exception as ex:
 				print("Error happened!", \

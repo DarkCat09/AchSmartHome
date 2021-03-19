@@ -4,11 +4,11 @@ My smart home on Raspberry Pi and Arduino. Abbreviated as SH or ASH.
 ## Components
 |Device|Filename|Description|Programming Language|Requires|
 |:----:|:------:|:---------:|:------------------:|:------:|
-|Raspberry Pi|`rsh.out`|Receiver (**R**eceiving **S**mart **H**ome program)|C++|WiringPi, Library nRF|
+|Raspberry Pi|`rsh.cpp`|Receiver (**R**eceiving **S**mart **H**ome program)|C++|[WiringPi](http://wiringpi.com/download-and-install/), Library [RF24](https://github.com/nRF24/RF24)|
 |Raspberry Pi|[`speaking_clock.py`](https://github.com/DarkCat09/AchSmartHome/blob/master/Raspberry/speaking_clock.py)|Smart speaking clock (not necessary to use in your SH)|Python|Python3, [SpeechRecognition](https://pypi.org/project/SpeechRecognition/), [gTTS](https://pypi.org/project/gTTS/), [pygame](https://pypi.org/project/pygame/)|
-|Arduino|`doorbell.ino`|Smart doorbell. Taking three photos on click|Wiring C++|Libraries ArduCAM and nRF|
-|Arduino|`temp.ino`|Temperature sensor|Wiring C++|Library nRF|
-|Arduino|`watering.ino`|Auto-watering plants|Wiring C++|Library nRF|
+|Arduino|`doorbell.ino`|Smart doorbell. Taking three photos on click|Wiring C++|Libraries [ArduCAM](https://github.com/ArduCAM/Arduino) and [RF24](https://github.com/nRF24/RF24)|
+|Arduino|`temp.ino`|Temperature sensor|Wiring C++|Library [RF24](https://github.com/nRF24/RF24)|
+|Arduino|`watering.ino`|Auto-watering plants|Wiring C++|Library [RF24](https://github.com/nRF24/RF24)|
 |Your computer|[AchSmartHome_Management](https://github.com/DarkCat09/AchSmartHome/tree/master/AchSmartHome_Management)|Windows application for monitoring sensors|C#|.NET Framework 4.7.2|
 |Your android phone|AchSmartHome|Mobile application for monitoring sensors|Java|Android 4.1+|
 

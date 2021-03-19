@@ -5,7 +5,7 @@ My smart home on Raspberry Pi and Arduino. Abbreviated as SH or ASH.
 |Device|Filename|Description|Programming Language|Requires|
 |:----:|:------:|:---------:|:------------------:|:------:|
 |Raspberry Pi|`rsh.cpp`|Receiver (**R**eceiving **S**mart **H**ome program)|C++|[WiringPi](http://wiringpi.com/download-and-install/), Library [RF24](https://github.com/nRF24/RF24)|
-|Raspberry Pi|[`speaking_clock.py`](https://github.com/DarkCat09/AchSmartHome/blob/master/Raspberry/speaking_clock.py)|Smart speaking clock (not necessary to use in your SH)|Python|Python3, [SpeechRecognition](https://pypi.org/project/SpeechRecognition/), [gTTS](https://pypi.org/project/gTTS/), [pygame](https://pypi.org/project/pygame/)|
+|Raspberry Pi|[`speaking_clock.py`](https://github.com/DarkCat09/AchSmartHome/blob/master/Raspberry/speaking_clock.py)|Smart speaking clock (not necessary to use in your SH)|Python|Python3, [SpeechRecognition](https://pypi.org/project/SpeechRecognition/), [gTTS](https://pypi.org/project/gTTS/), [pygame](https://pypi.org/project/pygame/), [requests](https://pypi.org/project/requests/), [Wikipedia](https://pypi.org/project/wikipedia/)|
 |Arduino|`doorbell.ino`|Smart doorbell. Taking three photos on click|Wiring C++|Libraries [ArduCAM](https://github.com/ArduCAM/Arduino) and [RF24](https://github.com/nRF24/RF24)|
 |Arduino|`temp.ino`|Temperature sensor|Wiring C++|Library [RF24](https://github.com/nRF24/RF24)|
 |Arduino|`watering.ino`|Auto-watering plants|Wiring C++|Library [RF24](https://github.com/nRF24/RF24)|

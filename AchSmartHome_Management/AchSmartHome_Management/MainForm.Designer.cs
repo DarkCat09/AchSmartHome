@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.панельToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -35,10 +36,14 @@
             this.регистрацияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.управлениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.главнаяСтраницаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.пользовательскиеДатчикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.светToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.умныйЗвонокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.копироватьЛогфайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.панельНавигацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПроектеASHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,10 +54,8 @@
             this.goNextLabel = new System.Windows.Forms.Label();
             this.goBackLabel = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.пользовательскиеДатчикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.умныйЗвонокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.панельНавигацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -119,6 +122,13 @@
             this.главнаяСтраницаToolStripMenuItem.Text = "Главная страница";
             this.главнаяСтраницаToolStripMenuItem.Click += new System.EventHandler(this.главнаяСтраницаToolStripMenuItem_Click);
             // 
+            // пользовательскиеДатчикиToolStripMenuItem
+            // 
+            this.пользовательскиеДатчикиToolStripMenuItem.Name = "пользовательскиеДатчикиToolStripMenuItem";
+            this.пользовательскиеДатчикиToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.пользовательскиеДатчикиToolStripMenuItem.Text = "Пользовательские датчики";
+            this.пользовательскиеДатчикиToolStripMenuItem.Click += new System.EventHandler(this.пользовательскиеДатчикиToolStripMenuItem_Click);
+            // 
             // светToolStripMenuItem
             // 
             this.светToolStripMenuItem.Name = "светToolStripMenuItem";
@@ -126,6 +136,13 @@
             this.светToolStripMenuItem.Tag = "Light";
             this.светToolStripMenuItem.Text = "Свет";
             this.светToolStripMenuItem.Click += new System.EventHandler(this.светToolStripMenuItem_Click);
+            // 
+            // умныйЗвонокToolStripMenuItem
+            // 
+            this.умныйЗвонокToolStripMenuItem.Name = "умныйЗвонокToolStripMenuItem";
+            this.умныйЗвонокToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.умныйЗвонокToolStripMenuItem.Text = "Умный звонок";
+            this.умныйЗвонокToolStripMenuItem.Click += new System.EventHandler(this.умныйЗвонокToolStripMenuItem_Click);
             // 
             // настройкиToolStripMenuItem
             // 
@@ -149,6 +166,22 @@
             this.выходToolStripMenuItem.Tag = "Exit";
             this.выходToolStripMenuItem.Text = "Выход";
             this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
+            // 
+            // видToolStripMenuItem
+            // 
+            this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.панельНавигацииToolStripMenuItem});
+            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
+            this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.видToolStripMenuItem.Text = "Вид";
+            // 
+            // панельНавигацииToolStripMenuItem
+            // 
+            this.панельНавигацииToolStripMenuItem.CheckOnClick = true;
+            this.панельНавигацииToolStripMenuItem.Name = "панельНавигацииToolStripMenuItem";
+            this.панельНавигацииToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.панельНавигацииToolStripMenuItem.Text = "Панель навигации";
+            this.панельНавигацииToolStripMenuItem.CheckedChanged += new System.EventHandler(this.панельНавигацииToolStripMenuItem_CheckedChanged);
             // 
             // справкаToolStripMenuItem
             // 
@@ -255,35 +288,16 @@
             this.saveFileDialog1.DefaultExt = "log";
             this.saveFileDialog1.FileName = "achsmarthome.log";
             // 
-            // пользовательскиеДатчикиToolStripMenuItem
+            // notifyIcon1
             // 
-            this.пользовательскиеДатчикиToolStripMenuItem.Name = "пользовательскиеДатчикиToolStripMenuItem";
-            this.пользовательскиеДатчикиToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.пользовательскиеДатчикиToolStripMenuItem.Text = "Пользовательские датчики";
-            this.пользовательскиеДатчикиToolStripMenuItem.Click += new System.EventHandler(this.пользовательскиеДатчикиToolStripMenuItem_Click);
+            this.notifyIcon1.Text = "AchSmartHome";
+            this.notifyIcon1.Visible = true;
             // 
-            // умныйЗвонокToolStripMenuItem
+            // timer1
             // 
-            this.умныйЗвонокToolStripMenuItem.Name = "умныйЗвонокToolStripMenuItem";
-            this.умныйЗвонокToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.умныйЗвонокToolStripMenuItem.Text = "Умный звонок";
-            this.умныйЗвонокToolStripMenuItem.Click += new System.EventHandler(this.умныйЗвонокToolStripMenuItem_Click);
-            // 
-            // видToolStripMenuItem
-            // 
-            this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.панельНавигацииToolStripMenuItem});
-            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
-            this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.видToolStripMenuItem.Text = "Вид";
-            // 
-            // панельНавигацииToolStripMenuItem
-            // 
-            this.панельНавигацииToolStripMenuItem.CheckOnClick = true;
-            this.панельНавигацииToolStripMenuItem.Name = "панельНавигацииToolStripMenuItem";
-            this.панельНавигацииToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.панельНавигацииToolStripMenuItem.Text = "Панель навигации";
-            this.панельНавигацииToolStripMenuItem.CheckedChanged += new System.EventHandler(this.панельНавигацииToolStripMenuItem_CheckedChanged);
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 200;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainForm
             // 
@@ -298,7 +312,7 @@
             this.Name = "MainForm";
             this.Tag = "FormTitle";
             this.Text = "Управление умным домом AchSmartHome";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel3.ResumeLayout(false);
@@ -333,6 +347,8 @@
         private System.Windows.Forms.ToolStripMenuItem умныйЗвонокToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem панельНавигацииToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

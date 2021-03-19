@@ -79,7 +79,10 @@ namespace AchSmartHome_Management
             Controls.Add(panel1);
 
             while (Accounts.username.Trim().Equals(""))
+            {
+                Logging.LogEvent(1, "WindowInit", "User is not logged in. Starting connection dialog ...");
                 соединитьсяToolStripMenuItem_Click(null, null);
+            }
 
             ReplacePanel<ControlPanel>();
             панельНавигацииToolStripMenuItem.Checked = GlobalSettings.showNavigationPanel;
@@ -187,6 +190,28 @@ namespace AchSmartHome_Management
             panel1.Controls.Add(pta);
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Logging.LogEvent(1, "CloseHandler", "MainForm_FormClosing(sender, e) started!");
+            if (!GlobalSettings.dontWorkInBackground)
+            {
+                Logging.LogEvent(0, "CloseHandler", "Application running in the background");
+                e.Cancel = true;
+                this.Hide();
+            }
+            else
+            {
+                CloseApp();
+            }
+        }
+
+        private void CloseApp()
+        {
+            Logging.LogEvent(0, "CloseHandler", "Closing program ...");
+            DatabaseConnecting.sqlDb.Close();
+            Environment.Exit(0);
+        }
+
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -207,12 +232,6 @@ namespace AchSmartHome_Management
         private void пользовательскиеДатчикиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ReplacePanel<OtherSensorsPanel>();
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Logging.LogEvent(0, "SimpleEventHandler", "Closing program ...");
-            DatabaseConnecting.sqlDb.Close();
         }
 
         private void регистрацияToolStripMenuItem_Click(object sender, EventArgs e)
@@ -412,6 +431,11 @@ namespace AchSmartHome_Management
         {
             GlobalSettings.ChangeViewSettings(панельНавигацииToolStripMenuItem.Checked);
             ChangeNavPanelVisibility(панельНавигацииToolStripMenuItem.Checked);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            // TODO
         }
     }
 }

@@ -18,3 +18,4 @@ You can buy OV2640 for a smart doorbell on AliExpress: https://aliexpress.ru/ite
 
 ## Raspberry Pi
 Pinout: https://pinout.xyz/pinout/wiringpi
+SPI: https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md#hardware

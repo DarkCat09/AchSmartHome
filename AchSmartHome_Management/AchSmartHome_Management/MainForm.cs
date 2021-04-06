@@ -21,6 +21,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace AchSmartHome_Management
 {
@@ -35,6 +36,18 @@ namespace AchSmartHome_Management
 
         private static MyStack<int> prevPanelsType = new MyStack<int>();
         private static MyStack<int> nextPanelsType = new MyStack<int>();
+
+        /// <summary>
+        /// Hardcoded past date and time. 
+        /// Захардкоженные прошедшие дата и время.
+        /// </summary>
+        public static DateTime lastUpdateDt = new DateTime(2021, 04, 05, 20, 24, 00);
+
+        /// <summary>
+        /// Is application running in the background?
+        /// Работает ли приложение в фоне?
+        /// </summary>
+        public static bool backgroundMode = false;
 
         public MainForm()
         {
@@ -67,6 +80,30 @@ namespace AchSmartHome_Management
             #endregion
 
             Accounts.LoadCredentials();
+
+            #region Receiving "last update" value
+            List<object> lastUpdateResult = DatabaseConnecting.ProcessSqlRequest(
+                "SELECT valdatetime FROM `other_sensors` WHERE id = 0 LIMIT 1"
+            );
+            if (lastUpdateResult.Count < 1)
+            {
+                Logging.LogEvent(
+                    4, "BackgroundMonitor",
+                    "The server did not return last update field! Timer will be disabled."
+                );
+                notifyIcon1.ShowBalloonTip(
+                    2000, "AchSmartHome",
+                    Languages.GetLocalizedString(
+                        "GetUpdateResultError",
+                        "The server did not return the critical system value \"last update\"! " +
+                        "Background process will be terminated."
+                    ),
+                    ToolTipIcon.Error);
+                timer1.Enabled = false;
+                timer1.Stop();
+            }
+            lastUpdateDt = DateTime.Parse(lastUpdateResult[0].ToString());
+            #endregion
 
             GlobalSettings.InitThemeAndLang(Controls, this);
             saveFileDialog1.Title = Languages.GetLocalizedString("ChooseLogDest", "Choose Log-file Copying Destination");
@@ -198,6 +235,7 @@ namespace AchSmartHome_Management
                 Logging.LogEvent(0, "CloseHandler", "Application running in the background");
                 e.Cancel = true;
                 this.Hide();
+                backgroundMode = true;
             }
             else
             {
@@ -208,13 +246,14 @@ namespace AchSmartHome_Management
         private void CloseApp()
         {
             Logging.LogEvent(0, "CloseHandler", "Closing program ...");
+            notifyIcon1.Visible = false;
             DatabaseConnecting.sqlDb.Close();
             Environment.Exit(0);
         }
 
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Close();
+            CloseApp();
         }
 
         private void соединитьсяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -384,6 +423,12 @@ namespace AchSmartHome_Management
 
         private void PanelChanged(object sender, ControlEventArgs e)
         {
+            // AutoSize improvment:
+            // Reset form size to smaller to start auto-resizing
+            Logging.LogEvent(0, "ReplacePanel", "Resizing main window...");
+            this.Size = new System.Drawing.Size(397, 224);
+
+            // Changing header text
             panelNameLabel.Text = Languages.GetLocalizedString("PanelName" + GetPanelType(e.Control), "Panel");
         }
 
@@ -435,7 +480,72 @@ namespace AchSmartHome_Management
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            // TODO
+            // Checking for new values of doorbell in the DB
+            List<object> newid = DatabaseConnecting.ProcessSqlRequest(
+                $"SELECT `photosid`, `camdatetime` FROM `doorbell` " +
+                $"WHERE `camdatetime` > '{lastUpdateDt:yyyy-MM-dd HH:mm:ss}' " +
+                $"ORDER BY `camdatetime` DESC"
+            );
+            if (newid.Count > 0)
+            {
+                // Change "last update" field value
+                lastUpdateDt = DateTime.Parse(newid[1].ToString());
+                DatabaseConnecting.ProcessSqlRequest(
+                    $"UPDATE `other_sensors` SET valdatetime='{lastUpdateDt:yyyy-MM-dd HH:mm:ss}' WHERE id = 0",
+                    null, true
+                );
+                // Notify about it
+                Logging.LogEvent(0, "BackgroundMonitor", "New doorbell value");
+                notifyIcon1.ShowBalloonTip(
+                    2000, "AchSmartHome",
+                    Languages.GetLocalizedString("DoorbellActivated", "The doorbell rings! View photos."),
+                    ToolTipIcon.Info
+                );
+                if (backgroundMode)
+                    ReplacePanel<WirelessDoorbell>();
+            }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            backgroundMode = false;
+        }
+
+        private void выходИзПрофиляToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Accounts.username = "";
+            Accounts.passhash = "";
+            Accounts.userid = 0;
+            Accounts.userprivs = 4;
+            Accounts.SaveCredentials();
+        }
+
+        private void перезапускToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void перезапускМониторингаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = true;
+            timer1.Start();
+        }
+
+        private void выходTrayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CloseApp();
+        }
+
+        private void закрытьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            // instead of DockStyle.Fill, that breaks all layout
+            //panel1.Size = new System.Drawing.Size(this.Size.Width - 24, this.Size.Height - 51);
         }
     }
 }

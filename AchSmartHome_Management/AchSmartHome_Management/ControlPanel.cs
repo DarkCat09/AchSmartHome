@@ -61,47 +61,52 @@ namespace AchSmartHome_Management
                 linkLabel1.Text = sensorsText[3];
                 label3.Text     = sensorsText[4];
 
-                System.Collections.Generic.List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
-                    "SELECT id, valdatetime, IFNULL(temp, 0.00) AS temp, IFNULL(humidity, 0.00) AS humidity " +
-                    "FROM `sensors_values` " +
-                    "WHERE valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY) " +
-                    "ORDER BY id DESC LIMIT 1"
-                );
+                System.Collections.Generic.Dictionary<string, object> reqResult = HomeSensor.GetMainSensorsValues(dt);
 
-                if (sqlReqResult.Count > 0)
+                if (reqResult.Count > 0)
                 {
                     label1.Text =
-                        Convert.ToDouble(sqlReqResult[2]).ToString() + " °C / " +
-                        ((Convert.ToDouble(sqlReqResult[2]) * 9.00 / 5.00) + 32.00).ToString() + " °F";
+                        Convert.ToDouble(reqResult["temperature"]).ToString() + " °C / " +
+                        ((Convert.ToDouble(reqResult["temperature"]) * 9.00 / 5.00) + 32.00).ToString() + " °F";
 
                     sensorsToolTips[0].SetToolTip(
-                        label1, sensorsToolTips[0].ToolTipTitle + sqlReqResult[1].ToString()
+                        label1, sensorsToolTips[0].ToolTipTitle + reqResult["datetime"].ToString()
                     );
 
-                    label2.Text = Convert.ToInt32(sqlReqResult[3]).ToString() + "%";
+                    label2.Text = Convert.ToInt32(reqResult["humidity"]).ToString() + "%";
 
                     sensorsToolTips[1].SetToolTip(
-                        label2, sensorsToolTips[1].ToolTipTitle + sqlReqResult[1].ToString()
+                        label2, sensorsToolTips[1].ToolTipTitle + reqResult["datetime"].ToString()
+                    );
+                }
+                else
+                {
+                    Logging.LogEvent(
+                        2, "ControlPanelUpdater",
+                        $"The server did not return sensors values. DT={dt:dd.MM.yyyy HH:mm:ss}"
                     );
                 }
 
                 System.Collections.Generic.List<object> sqlReqWateringResult =
                     DatabaseConnecting.ProcessSqlRequest(
-                        "SELECT * FROM `watering` " +
-                        "WHERE valdatetime > ('" + dt.ToString("yyyy-MM-dd") + "') " +
-                        "AND valdatetime < DATE_ADD('" + dt.ToString("yyyy-MM-dd") + "', INTERVAL 1 DAY) " +
-                        "ORDER BY id DESC LIMIT 1"
+                        $"SELECT id, valdatetime, flowernum, state FROM `watering` " +
+                        $"WHERE valdatetime > ('{dt:yyyy-MM-dd}') " +
+                        $"AND valdatetime < DATE_ADD('{dt:yyyy-MM-dd}', INTERVAL 1 DAY) " +
+                        $"ORDER BY id DESC LIMIT 1"
                     );
 
                 if (sqlReqWateringResult.Count > 0)
                 {
-                    label3.Text += " " + Convert.ToDateTime(sqlReqWateringResult[1]).ToString("dd.MM.yyyy HH:mm:ss");
+                    label3.Text += $" {Convert.ToDateTime(sqlReqWateringResult[1]):dd.MM.yyyy HH:mm:ss}";
                 }
             }
             catch (Exception ex)
             {
-                Logging.LogEvent(3, "ControlPanelUpdater", $"An error happened while updating main sensors values!\n{ex}");
-                _ = MessageBox.Show($"Произошла ошибка!\n{ex.Message}");
+                Logging.LogEvent(
+                    3, "ControlPanelUpdater",
+                    $"An error happened while updating main sensors values!\n{ex}"
+                );
+                MessageBox.Show($"Произошла ошибка!\n{ex.Message}");
             }
         }
 

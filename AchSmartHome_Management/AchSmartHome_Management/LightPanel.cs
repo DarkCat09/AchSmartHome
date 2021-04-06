@@ -25,7 +25,7 @@ namespace AchSmartHome_Management
             for (int i = 1; i <= 4; i++)
             {
                 System.Collections.Generic.List<object> lampResult = DatabaseConnecting.ProcessSqlRequest(
-                    "SELECT * from `light` WHERE (lampnum = " + i + ") ORDER BY id DESC LIMIT 1"
+                    $"SELECT id, valdatetime, lampnum, state from `light` WHERE (lampnum = {i}) ORDER BY id DESC LIMIT 1"
                 );
                 if (lampResult.Count > 0)
                     lampCheckboxes[i-1].Checked = Convert.ToBoolean(lampResult[3]);

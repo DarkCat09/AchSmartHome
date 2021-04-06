@@ -131,13 +131,52 @@ try:
 					fn.say(wikipedia.summary(phrase[phrase.find('википеди'+wiki_ending)+10:]))
 
 				# Погода сейчас
-				if fn.user_said(phrase, ['погода в']):
-					fn.say('Погода в процессе разработки')
+				if fn.user_said(phrase, ['погода в','погода на']):
+					
+					# Итак, берём название города.
+					# У нас может быть не только погода в Ульяновске,
+					# но и на Бали (предлог меняется), поэтому уточняем,
+					# что сказал пользователь.
+					# Если "погода в" не найдена (кол-во вхождений = -1),
+					# значит мы имеем дело с погодой "на"
+					after_weather_cmd = phrase.lower().find('погода в')
+					if (after_weather_cmd < 0):
+						# +1, который в конце, это наш "любимый" пробел
+						after_weather_cmd = phrase.lower().find('погода на') + 1
+					else:
+						# так же плюсуем пробел, если погода "в"
+						after_weather_cmd += 1
+
+					# В итоге у нас есть индекс для среза строки
+					# от основной команды до конца.
+					# А теперь ищем указание времени погоды, если есть
+					# (на завтра, через час), и обрабатываем
+					before_time_weather_cmd = -1
+
+					# Получаем город в Именительном падеже (nc = Nominative Case)
+					# через API htmlweb.ru
+					# Если сервис не сможет выдать результат, то
+					# нулевого элемента просто не будет, и скрипт
+					# перейдёт к блоку except в результате исключения OutOfRange
+					inflect_result = requests.get(
+						'https://htmlweb.ru/json/service/inflect?inflect=' +
+						(phrase[after_weather_cmd:].replace(' ','-')) + '&grammems=им,лок')
+
+					city_nc_name = json.loads(inflect_result)['items'][0]
+
+					# Получаем lat/lon и погоду через API OpenWeatherMap
+					owm_api_token = '356c9ae6724b02017df79fff753f5d5e'
+					owm_api_result = requests.get(
+						'https://api.openweathermap.org/data/2.5/weather?q=' +
+						city_nc_name + '&units=metric&lang=ru&appid=' + owm_api_token)
+					
+					city_latitude = owm_api_result['coord']['lat']
+					city_longitude = owm_api_result['coord']['lon']
 
 				# Аудиосказки для детей!
 				if fn.user_said(phrase, ['расскажи сказку', 'сказка']):
 
-					#fn.say('Запускаю')
+					fn.say('Запускаю')
 
 					# Так же, как и в случае с Википедией, определяем окончание
 					story_cmd_ending = ''
@@ -153,7 +192,7 @@ try:
 
 				if fn.user_said(phrase, ['включи песню','запусти песню','включи музыку','запусти музыку']):
 
-					#say('Запускаю')
+					say('Запускаю')
 
 					# Узнаём, что именно сказал пользователь
 					# (мне лень переписывать user_said)

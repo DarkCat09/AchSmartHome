@@ -44,7 +44,7 @@ namespace AchSmartHome_Management
             try
             {
                 List<object> sqlReqResult = DatabaseConnecting.ProcessSqlRequest(
-                    "SELECT * FROM users WHERE name = ?username",
+                    "SELECT id, name, passhash FROM users WHERE name = ?username",
                     new List<MySqlParameter>() { new MySqlParameter("username", username) }
                 );
                 if (sqlReqResult.Count > 0)

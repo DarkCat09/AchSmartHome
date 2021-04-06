@@ -41,6 +41,8 @@
             this.умныйЗвонокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.копироватьЛогфайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.панельНавигацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,9 +57,16 @@
             this.goBackLabel = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.выходИзПрофиляToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.перезапускToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.перезапускМониторингаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выходTrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -80,6 +89,8 @@
             this.регистрацияToolStripMenuItem,
             this.управлениеToolStripMenuItem,
             this.копироватьЛогфайлToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.закрытьToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.панельToolStripMenuItem.Name = "панельToolStripMenuItem";
             this.панельToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
@@ -158,6 +169,18 @@
             this.копироватьЛогфайлToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.копироватьЛогфайлToolStripMenuItem.Text = "Копировать лог-файл";
             this.копироватьЛогфайлToolStripMenuItem.Click += new System.EventHandler(this.копироватьЛогфайлToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(192, 6);
+            // 
+            // закрытьToolStripMenuItem
+            // 
+            this.закрытьToolStripMenuItem.Name = "закрытьToolStripMenuItem";
+            this.закрытьToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.закрытьToolStripMenuItem.Text = "Закрыть окно";
+            this.закрытьToolStripMenuItem.Click += new System.EventHandler(this.закрытьToolStripMenuItem_Click);
             // 
             // выходToolStripMenuItem
             // 
@@ -290,13 +313,64 @@
             // 
             // notifyIcon1
             // 
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "AchSmartHome";
             this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.выходИзПрофиляToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.перезапускToolStripMenuItem,
+            this.перезапускМониторингаToolStripMenuItem,
+            this.выходTrayToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(216, 98);
+            // 
+            // выходИзПрофиляToolStripMenuItem
+            // 
+            this.выходИзПрофиляToolStripMenuItem.Name = "выходИзПрофиляToolStripMenuItem";
+            this.выходИзПрофиляToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.выходИзПрофиляToolStripMenuItem.Tag = "Logout";
+            this.выходИзПрофиляToolStripMenuItem.Text = "Выход из профиля";
+            this.выходИзПрофиляToolStripMenuItem.Click += new System.EventHandler(this.выходИзПрофиляToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(212, 6);
+            // 
+            // перезапускToolStripMenuItem
+            // 
+            this.перезапускToolStripMenuItem.Name = "перезапускToolStripMenuItem";
+            this.перезапускToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.перезапускToolStripMenuItem.Tag = "RestartApp";
+            this.перезапускToolStripMenuItem.Text = "Перезапуск приложения";
+            this.перезапускToolStripMenuItem.Click += new System.EventHandler(this.перезапускToolStripMenuItem_Click);
+            // 
+            // перезапускМониторингаToolStripMenuItem
+            // 
+            this.перезапускМониторингаToolStripMenuItem.Name = "перезапускМониторингаToolStripMenuItem";
+            this.перезапускМониторингаToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.перезапускМониторингаToolStripMenuItem.Tag = "RestartMonitor";
+            this.перезапускМониторингаToolStripMenuItem.Text = "Перезапуск мониторинга";
+            this.перезапускМониторингаToolStripMenuItem.Click += new System.EventHandler(this.перезапускМониторингаToolStripMenuItem_Click);
+            // 
+            // выходTrayToolStripMenuItem
+            // 
+            this.выходTrayToolStripMenuItem.Name = "выходTrayToolStripMenuItem";
+            this.выходTrayToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.выходTrayToolStripMenuItem.Tag = "Exit";
+            this.выходTrayToolStripMenuItem.Text = "Выход";
+            this.выходTrayToolStripMenuItem.Click += new System.EventHandler(this.выходTrayToolStripMenuItem_Click);
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 200;
+            this.timer1.Interval = 2000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainForm
@@ -313,9 +387,11 @@
             this.Tag = "FormTitle";
             this.Text = "Управление умным домом AchSmartHome";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel3.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,6 +425,14 @@
         private System.Windows.Forms.ToolStripMenuItem панельНавигацииToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem перезапускToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem выходИзПрофиляToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem выходTrayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem перезапускМониторингаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem закрытьToolStripMenuItem;
     }
 }
 

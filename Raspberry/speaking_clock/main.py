@@ -39,7 +39,8 @@ from pygame import mixer
 # Подгрузка отдельных файлов умных часов
 # с функциями и параметрами.
 # НЕ ТРОГАТЬ!
-import functions as fn
+import core_functions as fn
+import api_functions as apifn
 from user_prefs import Prefs
 
 # Инициализация моего класса Preferences
@@ -54,7 +55,6 @@ if ('speech_recognition' in sys.modules):
 	recog = sr.Recognizer()
 	mic = sr.Microphone()
 
-mixer_playing = False
 if ('pygame' in sys.modules):
 	mixer.pre_init(44100, -16, 2, 1024)
 	mixer.init()
@@ -65,163 +65,174 @@ if ('wikipedia' in sys.modules):
 if ('yandex_music' in sys.modules):
 	ymcl = yandex_music.Client.from_credentials(prefs.ymcreds_username, prefs.ymcreds_password)
 
+print('Initialize OK!')
+
 
 # Основной цикл
 try:
 	while True:
-		with mic as audio_file:
 
-			# Записываем речь
-			recog.adjust_for_ambient_noise(audio_file)
-			audio = recog.listen(audio_file)
+		if (mixer.music.get_busy() and prefs.stop_recog_on_music):
+			pass
+		else:
+			
+			with mic as audio_file:
 
-			try:
+				# Записываем речь
+				recog.adjust_for_ambient_noise(audio_file)
+				audio = recog.listen(audio_file)
 
-				# Распознаём с помощью сервисов Google
-				phrase = recog.recognize_google(audio, language=prefs.localization)
-				print(phrase)
+				try:
 
-				# Приветствие
-				if fn.user_said(phrase, ['привет','здравствуй','доброе утро','добрый день','добрый вечер']):
-					fn.say('Здравствуйте!')
+					# Распознаём с помощью сервисов Google
+					phrase = recog.recognize_google(audio, language=prefs.localization)
+					print(phrase)
 
-				# Сколько время?
-				if fn.user_said(phrase, ['сколько время','сколько сейчас время', 'только сейчас время']):
-					# слово "только" добавлено из-за
-					# некорректности распознавания в некоторых случаях
-					now = datetime.datetime.now()
-					fn.say(str(now.strftime('%H:%M')))
+					# Приветствие
+					if fn.user_said(phrase, ['привет','здравствуй','доброе утро','добрый день','добрый вечер']):
+						fn.say('Здравствуйте!')
 
-				# Определяем город
-				if fn.user_said(phrase, ['местоположение','текущий город','где я нахожусь']):
+					# Сколько время?
+					if fn.user_said(phrase, ['сколько время','сколько сейчас время', 'только сейчас время']):
+						# слово "только" добавлено из-за
+						# некорректности распознавания в некоторых случаях
+						fn.say(fn.get_current_time())
 
-					# Получаем IP-адрес
-					curip = requests.get('http://ifconfig.me/ip').text
+					# Определяем город
+					if fn.user_said(phrase, ['местоположение','текущий город','где я нахожусь']):
 
-					# Определяем город через API DaData
-					api_url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip='+curip+'&language=ru'
-					api_token = 'Token cb94fce6082599b4fc7b97c8826c344415a3c3ea'
+						# Получаем IP-адрес
+						curip = requests.get('http://ifconfig.me/ip').text
 
-					api_result = requests.get( \
-						api_url, \
-						headers={'Accept': 'application/json', 'Authorization': api_token}).text
+						# Определяем город через API DaData
+						fn.say(apifn.get_dadata_city_by_ip(curip))
 
-					api_json_result = json.loads(api_result)['location']
+					# Поиск в Википедии
+					if fn.user_said(phrase, ['википедия','википедии']):
 
-					if (api_json_result != None):
-						country = api_json_result['data']['country']
-						city_type = api_json_result['data']['city_type_full']
-						city_name = api_json_result['data']['city']
-						fn.say('Текущее местоположение: '+country+', '+city_type+' '+city_name)
+						# Определяем, что именно сказал пользователь: википедиЯ или (найти в)википедиИ
+						wiki_ending = ''
+						if (phrase.lower().find('википедия') > -1):
+							wiki_ending = 'я'
+						elif (phrase.lower().find('википедии') > -1):
+							wiki_ending = 'и'
 
-				# Поиск в Википедии
-				if fn.user_said(phrase, ['википедия','википедии']):
+						# Вырезаем из фразы данные о желаемой статье (предположительный заголовок),
+						# Берём первый абзац об этом из Википедии и TTS'им.
+						# Число 10 = кол-во отсекаемых символов для получения только заголовка
+						# (9 букв из слова "википедия" + 1 пробел)
+						fn.say(wikipedia.summary(phrase[phrase.find('википеди'+wiki_ending)+10:]))
 
-					# Определяем, что именно сказал пользователь: википедиЯ или (найти в)википедиИ
-					wiki_ending = ''
-					if (phrase.lower().find('википедия') > -1):
-						wiki_ending = 'я'
-					elif (phrase.lower().find('википедии') > -1):
-						wiki_ending = 'и'
+					# Погода сейчас
+					if fn.user_said(phrase, ['погода в','погода на']):
+						
+						# Итак, берём название города.
+						# У нас может быть не только погода в Ульяновске,
+						# но и на Бали (предлог меняется), поэтому уточняем,
+						# что сказал пользователь.
+						# Если "погода в" не найдена (кол-во вхождений = -1),
+						# значит мы имеем дело с погодой "на"
+						after_weather_cmd = phrase.lower().find('погода в')
+						if (after_weather_cmd < 0):
+							# +1, который в конце, это наш "любимый" пробел
+							after_weather_cmd = phrase.lower().find('погода на') + 1
+						else:
+							# так же плюсуем пробел, если погода "в"
+							after_weather_cmd += 1
 
-					# Вырезаем из фразы данные о желаемой статье (предположительный заголовок),
-					# Берём первый абзац об этом из Википедии и TTS'им.
-					# Число 10 = кол-во отсекаемых символов для получения только заголовка
-					# (9 букв из слова "википедия" + 1 пробел)
-					fn.say(wikipedia.summary(phrase[phrase.find('википеди'+wiki_ending)+10:]))
+						# В итоге у нас есть индекс для среза строки
+						# от основной команды до конца.
+						# А теперь ищем указание времени погоды, если есть
+						# (на завтра, через час), и обрабатываем
+						before_time_weather_cmd = -1
 
-				# Погода сейчас
-				if fn.user_said(phrase, ['погода в','погода на']):
-					
-					# Итак, берём название города.
-					# У нас может быть не только погода в Ульяновске,
-					# но и на Бали (предлог меняется), поэтому уточняем,
-					# что сказал пользователь.
-					# Если "погода в" не найдена (кол-во вхождений = -1),
-					# значит мы имеем дело с погодой "на"
-					after_weather_cmd = phrase.lower().find('погода в')
-					if (after_weather_cmd < 0):
-						# +1, который в конце, это наш "любимый" пробел
-						after_weather_cmd = phrase.lower().find('погода на') + 1
-					else:
-						# так же плюсуем пробел, если погода "в"
-						after_weather_cmd += 1
+						# Получаем город в Именительном падеже (nc = Nominative Case)
+						# через API htmlweb.ru
+						# Если сервис не сможет выдать результат, то
+						# нулевого элемента просто не будет, и скрипт
+						# перейдёт к блоку except в результате исключения OutOfRange
+						# (код перенесён в api_functions)
+						city_nc_name = apifn.inflect((phrase[after_weather_cmd:].replace(' ','-')), 'им,лок')
 
-					# В итоге у нас есть индекс для среза строки
-					# от основной команды до конца.
-					# А теперь ищем указание времени погоды, если есть
-					# (на завтра, через час), и обрабатываем
-					before_time_weather_cmd = -1
+						# Получаем lat/lon и погоду через API OpenWeatherMap
+						owm_api_token = '356c9ae6724b02017df79fff753f5d5e'
+						owm_api_result = requests.get(
+							'https://api.openweathermap.org/data/2.5/weather?q=' +
+							city_nc_name + '&units=metric&lang=ru&appid=' + owm_api_token)
+						
+						city_latitude = owm_api_result['coord']['lat']
+						city_longitude = owm_api_result['coord']['lon']
 
-					# Получаем город в Именительном падеже (nc = Nominative Case)
-					# через API htmlweb.ru
-					# Если сервис не сможет выдать результат, то
-					# нулевого элемента просто не будет, и скрипт
-					# перейдёт к блоку except в результате исключения OutOfRange
-					inflect_result = requests.get(
-						'https://htmlweb.ru/json/service/inflect?inflect=' +
-						(phrase[after_weather_cmd:].replace(' ','-')) + '&grammems=им,лок')
+					# Аудиосказки для детей!
+					if fn.user_said(phrase, ['расскажи сказку', 'сказка']):
 
-					city_nc_name = json.loads(inflect_result)['items'][0]
+						#fn.say('Запускаю')
 
-					# Получаем lat/lon и погоду через API OpenWeatherMap
-					owm_api_token = '356c9ae6724b02017df79fff753f5d5e'
-					owm_api_result = requests.get(
-						'https://api.openweathermap.org/data/2.5/weather?q=' +
-						city_nc_name + '&units=metric&lang=ru&appid=' + owm_api_token)
-					
-					city_latitude = owm_api_result['coord']['lat']
-					city_longitude = owm_api_result['coord']['lon']
+						# Так же, как и в случае с Википедией, определяем окончание
+						story_cmd_ending = ''
+						if (phrase.lower().find('сказку') > -1):
+							story_cmd_ending = 'у'
+						elif (phrase.lower().find('сказка') > -1):
+							story_cmd_ending = 'а'
 
-				# Аудиосказки для детей!
-				if fn.user_said(phrase, ['расскажи сказку', 'сказка']):
-
-					fn.say('Запускаю')
-
-					# Так же, как и в случае с Википедией, определяем окончание
-					story_cmd_ending = ''
-					if (phrase.lower().find('сказку') > -1):
-						story_cmd_ending = 'у'
-					elif (phrase.lower().find('сказка') > -1):
-						story_cmd_ending = 'а'
-
-					# Всё тем же способом извлекаем название сказки (6 букв из "сказка" + 1 пробел)
-					ymcl.search(phrase[phrase.find('сказк'+story_cmd_ending)+7:], True, 'track').tracks.results[0].download('story.mp3', 'mp3')
-					# Запускаем
-					fn.play_file('story.mp3')
-
-				if fn.user_said(phrase, ['включи песню','запусти песню','включи музыку','запусти музыку']):
-
-					say('Запускаю')
-
-					# Узнаём, что именно сказал пользователь
-					# (мне лень переписывать user_said)
-					song_cmd = ''
-					if (phrase.lower().find('песню') > -1):
-						song_cmd = 'песню'
-					elif (phrase.lower().find('музыку') > -1):
-						song_cmd = 'музыку'
-
-					# Проверяем, что пользователь сказал название песни/альбома/исполнителя:
-					# Если длина фразы после команды больше двух символов
-					# (ожидаемый пробел + мало ли, вдруг recognizer
-					#  что-нибудь в конец добавляет),
-					# то пытаемся найти музЫку на Яндексе и воспроизвести её
-					after_cmd = phrase[phrase.lower().find(song_cmd)+len(song_cmd):]
-					if (len(after_cmd) > 2):
-						# Пропускаем первый пробел и ищем на ЯМузыке
-						ymcl.search(after_cmd[1:], True, 'track').tracks.results[0].download('music.mp3', 'mp3')
+						# Всё тем же способом извлекаем название сказки (6 букв из "сказка" + 1 пробел)
+						ymcl.search(phrase[phrase.find('сказк'+story_cmd_ending)+7:], True, 'track').tracks.results[0].download('story.mp3', 'mp3')
 						# Запускаем
-						fn.play_file('music.mp3')
+						fn.play_file('story.mp3', playpause_key=prefs.key_playpause)
 
-			except Exception as ex:
-				print("Error happened!", \
-				str(datetime.datetime.now().strftime('%H:%M:%S')), \
-				str(ex), sep='\n')
+					# Музыка
+					if fn.user_said(phrase, ['включи песню','запусти песню','включи музыку','запусти музыку']):
+
+						#fn.say('Запускаю')
+
+						# Узнаём, что именно сказал пользователь
+						# (мне лень переписывать user_said)
+						song_cmd = ''
+						if (phrase.lower().find('песню') > -1):
+							song_cmd = 'песню'
+						elif (phrase.lower().find('музыку') > -1):
+							song_cmd = 'музыку'
+
+						# Проверяем, что пользователь сказал название песни/альбома/исполнителя:
+						# Если длина фразы после команды больше двух символов
+						# (ожидаемый пробел + мало ли, вдруг recognizer
+						#  что-нибудь в конец добавляет),
+						# то пытаемся найти музЫку на Яндексе и воспроизвести её
+						after_cmd = phrase[phrase.lower().find(song_cmd)+len(song_cmd):]
+						if (len(after_cmd) > 2):
+							# Пропускаем первый пробел и ищем на ЯМузыке
+							ymcl.search(after_cmd[1:], True, 'track').tracks.results[0].download('music.mp3', 'mp3')
+							# Запускаем
+							fn.play_file('music.mp3', playpause_key=prefs.key_playpause)
+
+					# Кулинарные рецепты
+					if fn.user_said(phrase, ['рецепт']):
+						
+						# Берём название рецепта, которое находится после слова "рецепт".
+						# Та же схема: поиск вхождения основной команды "рецепт",
+						# смещаемся на столько же символов, сколько в команде (6 букв)
+						# и прибавляем пробел, который обязательно будет (итого: 7 символов).
+						dish_name = phrase[phrase.find('рецепт')+7:]
+
+						# Пользователь мог сказать название блюда
+						# как в Именительном, так и в Родительном падеже
+						# (например, "рецепт цветаевского пирога" - Р. п.)
+						# Сервису HtmlWeb всё равно, в каком падеже
+						# я пихну ему словосочетание, поэтому подстрахуемся
+						dish_correct_name = apifn.inflect(dish_name)
+
+						# А теперь воспользуемся моей удобной (но огромной)
+						# функцией парсинга рецептов
+						fn.say(apifn.parse_recipe(dish_correct_name))
+
+				except Exception as ex:
+					print("Error happened!", \
+					fn.get_current_time(), \
+					str(ex), sep='\n')
 
 except KeyboardInterrupt:
 	print("Stopped by keyboard!", \
-	str(datetime.datetime.now().strftime('%H:%M:%S')), \
+	fn.get_current_time(), \
 	sep='\n')
 
 finally:

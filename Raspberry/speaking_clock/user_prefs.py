@@ -23,13 +23,15 @@ class Prefs:
 
 		# ПОЛЬЗОВАТЕЛЬСКИЕ ПАРАМЕТРЫ:
 
-		self.__key_playpause = 'P' # Клавиша для возобновления/приостановки воспроизведения (None, если не используется)
+		self.__key_playpause = 'p' # Клавиша для возобновления/приостановки воспроизведения (None, если не используется)
 
 		self.__localization		= 'ru-RU' # Локализация
 		self.__language			= 'ru' # Язык
 
 		self.__ymcreds_username 	= 'achtest22@yandex.ru' # Ваш E-Mail на Яндексе
 		self.__ymcreds_password 	= '''tEs#t22''' # Пароль от почты
+
+		self.__stop_recog_on_music = True # Останавливать распознавание речи при проигрывании музыки (рекомендуется True)
 
 	@property
 	def key_playpause(self):
@@ -50,3 +52,7 @@ class Prefs:
 	@property
 	def ymcreds_password(self):
 		return self.__ymcreds_password
+
+	@property
+	def stop_recog_on_music(self):
+		return self.__stop_recog_on_music

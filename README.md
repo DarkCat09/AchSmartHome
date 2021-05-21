@@ -17,5 +17,5 @@ I bought [Raspberry Pi 4B](https://amperka.ru/product/malina-v4-2gb), Iskra boar
 You can buy OV2640 for a smart doorbell on AliExpress: https://aliexpress.ru/item/33046344720.html
 
 ## Raspberry Pi
-Pinout: https://pinout.xyz/pinout/wiringpi
+Pinout: https://pinout.xyz/pinout/wiringpi  
 SPI: https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md#hardware

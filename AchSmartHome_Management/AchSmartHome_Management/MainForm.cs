@@ -117,8 +117,13 @@ namespace AchSmartHome_Management
 
             while (Accounts.username.Trim().Equals(""))
             {
-                Logging.LogEvent(1, "WindowInit", "User is not logged in. Starting connection dialog ...");
-                соединитьсяToolStripMenuItem_Click(null, null);
+                Logging.LogEvent(1, "WindowInit", "User is not logged in. Opening connection dialog ...");
+                ConnectForm cf = new ConnectForm();
+                DialogResult dr = cf.ShowDialog();
+                if (dr == DialogResult.Cancel)
+                {
+                    CloseApp();
+                }
             }
 
             ReplacePanel<ControlPanel>();
@@ -298,7 +303,16 @@ namespace AchSmartHome_Management
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ReplacePanel<AboutProgram>();
+            MessageBox.Show(
+                Properties.Settings.Default.version,
+                Languages.GetLocalizedString("AboutProg", "About Program"),
+                MessageBoxButtons.OK, MessageBoxIcon.Information
+            );
+        }
+
+        private void оПроектеASHToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/DarkCat09/AchSmartHome");
         }
 
         private void копироватьЛогфайлToolStripMenuItem_Click(object sender, EventArgs e)
@@ -423,8 +437,9 @@ namespace AchSmartHome_Management
 
         private void PanelChanged(object sender, ControlEventArgs e)
         {
-            // AutoSize improvment:
-            // Reset form size to smaller to start auto-resizing
+            /* AutoSize improvment:
+             * Reset form size to smaller to start auto-resizing
+             */
             Logging.LogEvent(0, "ReplacePanel", "Resizing main window...");
             this.Size = new System.Drawing.Size(397, 224);
 

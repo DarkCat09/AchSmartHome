@@ -130,5 +130,14 @@ namespace AchSmartHome_Management.Properties {
                 this["cookie_passhash"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ASH Management v.1.0.0 by DarkCat09")]
+        public string version {
+            get {
+                return ((string)(this["version"]));
+            }
+        }
     }
 }

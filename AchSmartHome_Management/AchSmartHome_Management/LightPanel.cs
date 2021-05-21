@@ -44,21 +44,12 @@ namespace AchSmartHome_Management
 
             try
             {
-                byte[] byteReqData = System.Text.Encoding.UTF8.GetBytes(
-                    "action=light&num=" + _lampnum + "&state=" +
-                    Convert.ToInt32(lampCheckboxes[_lampnum + 1].Checked).ToString()
+                WebRequest wr = WebRequest.Create(
+                    $"http://{DatabaseConnecting.smartHomeServer}:80/rpishsimulator/request.php?action=light&" +
+                    $"num={_lampnum}&state={Convert.ToInt32(lampCheckboxes[_lampnum + 1].Checked)}"
                 );
-
-                WebRequest wr = WebRequest.Create("http://" + DatabaseConnecting.smartHomeServer + ":80/app_request.php");
-                wr.Method = "POST";
-                wr.ContentType = "application/x-www-form-urlencoded";
-                wr.ContentLength = byteReqData.Length;
-
-                System.IO.Stream reqStream = wr.GetRequestStream();
-                reqStream.Write(byteReqData, 0, byteReqData.Length);
-                reqStream.Close();
-
-                _ = wr.GetResponse();
+                wr.Method = "GET";
+                wr.GetResponse();
             }
             catch (Exception ex)
             {

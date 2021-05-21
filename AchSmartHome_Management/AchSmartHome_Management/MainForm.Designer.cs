@@ -219,7 +219,7 @@
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.оПрограммеToolStripMenuItem.Tag = "AboutProg";
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
@@ -227,9 +227,10 @@
             // оПроектеASHToolStripMenuItem
             // 
             this.оПроектеASHToolStripMenuItem.Name = "оПроектеASHToolStripMenuItem";
-            this.оПроектеASHToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.оПроектеASHToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.оПроектеASHToolStripMenuItem.Tag = "AboutProj";
             this.оПроектеASHToolStripMenuItem.Text = "О проекте ASH";
+            this.оПроектеASHToolStripMenuItem.Click += new System.EventHandler(this.оПроектеASHToolStripMenuItem_Click);
             // 
             // panel3
             // 
